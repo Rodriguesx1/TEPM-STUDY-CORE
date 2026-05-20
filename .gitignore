@@ -7,3 +7,5 @@ tsconfig.tsbuildinfo
 npm-debug.log*
 dist/
 coverage/
+
+.vercel
