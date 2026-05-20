@@ -62,7 +62,8 @@ npm run dev
 - PDF e salvo no Storage, extraido com `pdf-parse`, dividido em chunks e gravado em `document_chunks`.
 - Embeddings usam Gemini quando `GEMINI_API_KEY` existe.
 - Chat consulta chunks do usuario e responde via Gemini, com fallback OpenRouter.
-- Licencas bloqueiam recursos premium quando expiradas ou ausentes.
+- Licencas bloqueiam recursos premium quando expiradas ou ausentes para usuarios comuns.
+- Super administradores com `role = 'admin'` tem acesso ilimitado sem licenca.
 - Admin exige role `admin`.
 
 ## Pendencias para produção

@@ -9,13 +9,6 @@ set role = 'admin', updated_at = now()
 where email = 'deborallan1212@gmail.com';
 ```
 
-3. Crie uma licenca ativa para o admin:
-
-```sql
-insert into public.licenses (user_id, status, starts_at, expires_at)
-select id, 'active', now(), now() + interval '365 days'
-from public.users_profiles
-where email = 'deborallan1212@gmail.com';
-```
+3. Nao crie licenca para o super administrador. Admin e ilimitado por `role = 'admin'`, sem data de expiracao.
 
 Nao salve senha em migration, README, commit ou frontend. Senhas devem ficar apenas no Supabase Auth.

@@ -11,14 +11,23 @@ export async function POST(request: Request) {
     const { question } = (await request.json()) as { question?: string };
     if (!question?.trim()) return NextResponse.json({ error: "Pergunta obrigatoria." }, { status: 400 });
 
-    const { data: license } = await supabase
-      .from("licenses")
-      .select("id")
-      .eq("user_id", auth.user.id)
-      .in("status", ["active", "trial"])
-      .gte("expires_at", new Date().toISOString())
+    const { data: profile } = await supabase
+      .from("users_profiles")
+      .select("role")
+      .eq("id", auth.user.id)
       .maybeSingle();
-    if (!license) return NextResponse.json({ error: "Licenca ativa obrigatoria para usar IA." }, { status: 403 });
+    const isAdmin = profile?.role === "admin";
+
+    if (!isAdmin) {
+      const { data: license } = await supabase
+        .from("licenses")
+        .select("id")
+        .eq("user_id", auth.user.id)
+        .in("status", ["active", "trial"])
+        .gte("expires_at", new Date().toISOString())
+        .maybeSingle();
+      if (!license) return NextResponse.json({ error: "Licenca ativa obrigatoria para usar IA." }, { status: 403 });
+    }
 
     const { data: chunks } = await supabase
       .from("document_chunks")
@@ -36,7 +45,11 @@ export async function POST(request: Request) {
     ].join("\n\n");
 
     const result = await answerWithFallback(prompt);
-    await supabase.from("audit_logs").insert({ user_id: auth.user.id, action: `chat.${result.provider}`, entity_type: "ai" });
+    await supabase.from("audit_logs").insert({
+      user_id: auth.user.id,
+      action: isAdmin ? `chat.${result.provider}.admin_unlimited` : `chat.${result.provider}`,
+      entity_type: "ai",
+    });
     return NextResponse.json({ answer: result.answer, provider: result.provider });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Falha no chat IA." }, { status: 500 });
