@@ -2,8 +2,8 @@ import { getEnv } from "@/lib/utils";
 
 export function getSupabasePublicConfig() {
   return {
-    url: getEnv("NEXT_PUBLIC_SUPABASE_URL"),
-    anonKey: getEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY"),
+    url: process.env.NEXT_PUBLIC_SUPABASE_URL || null,
+    anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || null,
   };
 }
 

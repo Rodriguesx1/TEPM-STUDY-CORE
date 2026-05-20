@@ -4,6 +4,7 @@ tsconfig.tsbuildinfo
 .env
 .env.local
 .env.*.local
+.env.vercel*
 npm-debug.log*
 dist/
 coverage/
