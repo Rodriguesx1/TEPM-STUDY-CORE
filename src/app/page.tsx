@@ -2,8 +2,10 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowRight, Brain, FileText, Lock, Users } from "lucide-react";
 import { LgpdConsentBanner } from "@/components/privacy/lgpd-consent-banner";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ShinyButton } from "@/components/ui/shiny-button";
 
 const features = [
   { title: "Biblioteca inteligente", description: "PDFs deixam de ficar espalhados e viram memoria pesquisavel.", icon: FileText },
@@ -58,9 +60,12 @@ export default function HomePage() {
           <div>
             <p className="font-serif text-2xl font-bold text-[#32162c]">TEPM Study</p>
           </div>
-          <Link href="/login">
-            <Button size="sm">Entrar</Button>
-          </Link>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <Link href="/login">
+              <Button size="sm">Entrar</Button>
+            </Link>
+          </div>
         </nav>
         <div className="mx-auto grid max-w-7xl items-center gap-10 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
           <div>
@@ -73,9 +78,9 @@ export default function HomePage() {
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link href="/login">
-                <Button size="lg">
-                  Login <ArrowRight className="h-4 w-4" />
-                </Button>
+                <ShinyButton className="bg-primary text-primary-foreground shadow-[0_12px_30px_rgba(47,125,104,0.22)]">
+                  Login <ArrowRight className="inline h-4 w-4" />
+                </ShinyButton>
               </Link>
               <Link href="/login?teste=1">
                 <Button size="lg" variant="outline">

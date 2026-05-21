@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PwaRegister } from "@/components/pwa/pwa-register";
 import "./globals.css";
 
 const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL;
@@ -62,7 +63,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
+      <body>
+        <PwaRegister />
+        {children}
+      </body>
     </html>
   );
 }

@@ -70,6 +70,9 @@ export default async function DashboardPage() {
             <Link href="/dashboard/productivity">
               <Button variant="outline">Foco</Button>
             </Link>
+            <Link href="/dashboard/ecosystem">
+              <Button variant="outline">Ecossistema</Button>
+            </Link>
           </CardContent>
         </Card>
         <Card>
