@@ -1,5 +1,5 @@
 import { AppShell } from "@/components/layout/app-shell";
-import { Button } from "@/components/ui/button";
+import { StudyPathGenerator } from "@/components/study/study-path-generator";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requirePremium } from "@/lib/auth/guards";
 import { getServerSupabase } from "@/lib/supabase/server";
@@ -25,7 +25,7 @@ export default async function StudyPathsPage() {
             </article>
           ))}
           {!data?.length ? <p className="text-sm text-muted-foreground">Nenhuma trilha criada ainda. A geração automática será liberada após materiais processados.</p> : null}
-          <Button disabled={!context.hasPremiumAccess}>Gerar trilha com IA</Button>
+          <StudyPathGenerator disabled={!context.hasPremiumAccess} />
         </CardContent>
       </Card>
     </AppShell>

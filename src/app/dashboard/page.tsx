@@ -49,6 +49,15 @@ export default async function DashboardPage() {
             <Link href="/caderno">
               <Button variant="outline">Abrir caderno</Button>
             </Link>
+            <Link href="/dashboard/videos">
+              <Button variant="outline">Enviar video</Button>
+            </Link>
+            <Link href="/dashboard/slides">
+              <Button variant="outline">Gerar slides</Button>
+            </Link>
+            <Link href="/dashboard/community">
+              <Button variant="outline">Comunidade</Button>
+            </Link>
           </CardContent>
         </Card>
         <Card>

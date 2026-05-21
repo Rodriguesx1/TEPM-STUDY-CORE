@@ -38,6 +38,14 @@ export function UploadPanel() {
       const { data: userResult, error: userError } = await supabase.auth.getUser();
       if (userError || !userResult.user) throw new Error("Login obrigatorio para enviar PDF.");
 
+      const preflight = await fetch("/api/documents/preflight", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mimeType: file.type, size: file.size }),
+      });
+      const preflightPayload = await readJsonResponse(preflight);
+      if (!preflight.ok) throw new Error(preflightPayload.error ?? "Upload nao autorizado.");
+
       const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
       const filePath = `${userResult.user.id}/${crypto.randomUUID()}-${safeName}`;
       const upload = await supabase.storage.from("study-documents").upload(filePath, file, {

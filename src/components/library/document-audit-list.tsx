@@ -17,6 +17,7 @@ export function DocumentAuditList({ documents }: { documents: DocumentWithChunks
   const [minimized, setMinimized] = useState(false);
   const [opened, setOpened] = useState<Record<string, boolean>>({});
   const [maximized, setMaximized] = useState<Record<string, boolean>>({});
+  const [mindMapStatus, setMindMapStatus] = useState<Record<string, string>>({});
   const grouped = useMemo(() => {
     return documents.reduce<Record<string, DocumentWithChunks[]>>((acc, doc) => {
       const category = doc.theme || "Sem categoria";
@@ -25,6 +26,21 @@ export function DocumentAuditList({ documents }: { documents: DocumentWithChunks
       return acc;
     }, {});
   }, [documents]);
+
+  async function generateMindMap(documentId: string) {
+    setMindMapStatus((current) => ({ ...current, [documentId]: "Gerando mapa mental..." }));
+    try {
+      const response = await fetch(`/api/documents/${documentId}/mind-map`, { method: "POST" });
+      const payload = (await response.json()) as { error?: string };
+      if (!response.ok) throw new Error(payload.error ?? "Falha ao gerar mapa mental.");
+      setMindMapStatus((current) => ({ ...current, [documentId]: "Mapa mental gerado e salvo." }));
+    } catch (error) {
+      setMindMapStatus((current) => ({
+        ...current,
+        [documentId]: error instanceof Error ? error.message : "Nao foi possivel gerar mapa mental.",
+      }));
+    }
+  }
 
   return (
     <section className="rounded-[18px] border border-border bg-white/85 shadow-sm backdrop-blur">
@@ -132,8 +148,14 @@ export function DocumentAuditList({ documents }: { documents: DocumentWithChunks
                                           {isMaximized ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
                                           {isMaximized ? "Compactar" : "Maximizar"}
                                         </Button>
+                                        <Button type="button" variant="secondary" size="sm" onClick={() => generateMindMap(doc.id)}>
+                                          Gerar mapa mental
+                                        </Button>
                                       </div>
                                     </div>
+                                    {mindMapStatus[doc.id] ? (
+                                      <p className="mt-3 rounded-[12px] bg-white/75 p-3 text-sm text-muted-foreground">{mindMapStatus[doc.id]}</p>
+                                    ) : null}
                                     <div
                                       className={[
                                         "mt-4 overflow-y-auto rounded-[12px] bg-white/80 p-4 pr-3 text-sm leading-7 text-muted-foreground",

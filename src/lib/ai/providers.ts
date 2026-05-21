@@ -56,6 +56,44 @@ export async function answerWithFallback(prompt: string) {
   throw new Error("Nenhum provedor de IA configurado no servidor.");
 }
 
+export async function transcribeVideoWithGemini(bytes: ArrayBuffer, mimeType: string) {
+  const geminiKey = getEnv("GEMINI_API_KEY");
+  if (!geminiKey) throw new Error("GEMINI_API_KEY nao configurada para transcricao de video.");
+
+  const client = new GoogleGenerativeAI(geminiKey);
+  const model = client.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const base64 = Buffer.from(bytes).toString("base64");
+  const prompt = [
+    "Transcreva esta aula em video em portugues.",
+    "Retorne apenas JSON valido com as chaves:",
+    "transcript: texto completo,",
+    "summary: resumo objetivo,",
+    "topics: lista de topicos,",
+    "segments: lista com start_seconds, end_seconds, title e text,",
+    "fixation_questions: lista de perguntas de fixacao.",
+    "Se nao conseguir entender o video, retorne JSON com transcript vazio e um resumo explicando a falha.",
+  ].join("\n");
+
+  const result = await model.generateContent([
+    prompt,
+    {
+      inlineData: {
+        data: base64,
+        mimeType,
+      },
+    },
+  ]);
+  return result.response.text();
+}
+
+export function parseAiJson<T extends Record<string, unknown>>(value: string, fallback: T): T {
+  try {
+    return JSON.parse(value.replace(/^```json/i, "").replace(/```$/i, "").trim()) as T;
+  } catch {
+    return fallback;
+  }
+}
+
 const allowedCategories = [
   "Terapia e clinica",
   "Apostila e estudo",

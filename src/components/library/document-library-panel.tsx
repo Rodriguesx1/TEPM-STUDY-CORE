@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, ChevronUp, FileText, Maximize2, Minimize2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ChevronDown, ChevronUp, FileText, Maximize2, Minimize2, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,12 +16,35 @@ function getDocumentContent(doc: DocumentWithChunks) {
 }
 
 export function DocumentLibraryPanel({ documents, error }: { documents: DocumentWithChunks[]; error?: string }) {
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [actionMessage, setActionMessage] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
   const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(documents[0]?.id ?? null);
   const selectedDocument = useMemo(() => {
     return documents.find((doc) => doc.id === selectedDocumentId) ?? documents[0] ?? null;
   }, [documents, selectedDocumentId]);
+
+  async function deleteSelectedDocument() {
+    if (!selectedDocument || deleting) return;
+    const confirmed = window.confirm(`Excluir o PDF "${selectedDocument.title}" e todos os chunks da memoria?`);
+    if (!confirmed) return;
+
+    setDeleting(true);
+    setActionMessage(null);
+    try {
+      const response = await fetch(`/api/documents/${selectedDocument.id}`, { method: "DELETE" });
+      const payload = (await response.json()) as { message?: string; error?: string };
+      if (!response.ok) throw new Error(payload.error ?? "Falha ao excluir documento.");
+      setActionMessage(payload.message ?? "Documento excluido.");
+      router.refresh();
+    } catch (error) {
+      setActionMessage(error instanceof Error ? error.message : "Nao foi possivel excluir o documento.");
+    } finally {
+      setDeleting(false);
+    }
+  }
   const selectedContent = selectedDocument ? getDocumentContent(selectedDocument) : "";
 
   useEffect(() => {
@@ -45,6 +69,7 @@ export function DocumentLibraryPanel({ documents, error }: { documents: Document
       </CardHeader>
       <CardContent className="space-y-3">
         {error ? <p className="rounded-[14px] bg-[#fff1f2] p-3 text-sm text-destructive">{error}</p> : null}
+        {actionMessage ? <p className="rounded-[14px] bg-secondary p-3 text-sm text-secondary-foreground">{actionMessage}</p> : null}
         {documents.length ? (
           <article className="rounded-[16px] border bg-white p-4">
             <div className="flex flex-wrap items-start justify-between gap-3">
@@ -60,6 +85,10 @@ export function DocumentLibraryPanel({ documents, error }: { documents: Document
                 <Button type="button" variant="outline" size="sm" onClick={() => setExpanded((current) => !current)}>
                   {expanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
                   {expanded ? "Compactar" : "Expandir"}
+                </Button>
+                <Button type="button" variant="danger" size="sm" onClick={deleteSelectedDocument} disabled={deleting}>
+                  <Trash2 className="h-4 w-4" />
+                  {deleting ? "Excluindo..." : "Excluir"}
                 </Button>
               </div>
             </div>

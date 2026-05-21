@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, Brain, FileText, LayoutDashboard, MessageCircle, Shield, Users } from "lucide-react";
+import { BookOpen, Brain, FileText, LayoutDashboard, MessageCircle, Presentation, Shield, Users, Video } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { SessionContext } from "@/lib/auth/guards";
@@ -7,8 +7,10 @@ import type { SessionContext } from "@/lib/auth/guards";
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/biblioteca", label: "Biblioteca", icon: FileText },
+  { href: "/dashboard/videos", label: "Videos", icon: Video },
   { href: "/chat", label: "Mentora IA", icon: Brain },
   { href: "/trilhas", label: "Trilhas", icon: BookOpen },
+  { href: "/dashboard/slides", label: "Slides", icon: Presentation },
   { href: "/caderno", label: "Caderno", icon: MessageCircle },
   { href: "/comunidade", label: "Comunidade", icon: Users },
 ];

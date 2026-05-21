@@ -1,14 +1,17 @@
+import { CommunityPanel } from "@/components/community/community-panel";
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requirePremium } from "@/lib/auth/guards";
-import { getServerSupabase } from "@/lib/supabase/server";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
+
+export const dynamic = "force-dynamic";
 
 export default async function CommunityPage() {
   const context = await requirePremium();
-  const supabase = await getServerSupabase();
-  const { data, error } = await supabase
+  const admin = getSupabaseAdmin();
+  const { data, error } = await admin
     .from("room_members")
-    .select("chat_rooms(id,name,description,access_code)")
+    .select("role,chat_rooms(id,user_id,name,description,access_code,is_locked,created_at)")
     .eq("user_id", context.userId);
 
   return (
@@ -16,20 +19,11 @@ export default async function CommunityPage() {
       <Card>
         <CardHeader>
           <CardTitle>Comunidade interna</CardTitle>
-          <CardDescription>Salas privadas acessíveis apenas por membros autorizados e licença válida.</CardDescription>
+          <CardDescription>Salas privadas por codigo, mensagens e permissao por membro.</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-3">
+        <CardContent>
           {error ? <p className="rounded-[14px] bg-[#fff1f2] p-3 text-sm text-destructive">{error.message}</p> : null}
-          {data?.map((row) => {
-            const room = Array.isArray(row.chat_rooms) ? row.chat_rooms[0] : row.chat_rooms;
-            return room ? (
-              <article key={room.id} className="rounded-[16px] border bg-white p-4">
-                <h3 className="font-semibold">{room.name}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{room.description}</p>
-              </article>
-            ) : null;
-          })}
-          {!data?.length ? <p className="text-sm text-muted-foreground">Você ainda não participa de salas.</p> : null}
+          <CommunityPanel initialRooms={(data as any) ?? []} />
         </CardContent>
       </Card>
     </AppShell>
