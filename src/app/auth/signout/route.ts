@@ -6,7 +6,7 @@ export async function POST() {
     const supabase = await getServerSupabase();
     await supabase.auth.signOut();
   } catch {
-    // Missing Supabase env still returns user to login without crashing.
+    // Missing data env still returns user to login without crashing.
   }
   redirect("/login");
 }

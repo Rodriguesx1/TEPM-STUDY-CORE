@@ -1,20 +1,20 @@
 # Checklist QA Anti-Fake Fix
 
-## Local sem Supabase
+## Local sem ambiente de dados
 
 - `npm install`
 - `npm run typecheck`
 - `npm run build`
 - `/` carrega.
 - `/login` carrega.
-- Login sem env Supabase mostra erro controlado.
+- Login sem variaveis de dados mostra erro controlado.
 - `/dashboard` nao libera acesso fake.
 - Nenhuma chave aparece no front-end.
 
-## Com Supabase configurado
+## Com ambiente de dados configurado
 
 - Aplicar migrations sem erro.
-- Criar conta real via Supabase Auth.
+- Criar conta real via provedor de autenticacao.
 - Confirmar criação de `users_profiles`.
 - Criar licença ativa via rota admin ou SQL controlado.
 - Login redireciona para `/dashboard`.
@@ -31,6 +31,6 @@
 
 - Botao que apenas mostra toast sem persistir.
 - Dados mockados tratados como produção.
-- RLS desligado.
+- Politicas de isolamento desligadas.
 - Service role no navegador.
 - Build verde sem teste de fluxo.

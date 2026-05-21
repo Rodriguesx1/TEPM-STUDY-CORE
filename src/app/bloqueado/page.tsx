@@ -23,7 +23,7 @@ export default async function BlockedPage() {
         <CardContent className="space-y-4">
           <p className="text-sm leading-6 text-muted-foreground">
             Solicite uma licenca ao administrador da organizacao. O sistema nao usa localStorage nem liberacao falsa:
-            o desbloqueio depende de registro real no Supabase.
+            o desbloqueio depende de permissao real na plataforma.
           </p>
           <Link href="/dashboard">
             <Button variant="outline">Voltar ao dashboard</Button>

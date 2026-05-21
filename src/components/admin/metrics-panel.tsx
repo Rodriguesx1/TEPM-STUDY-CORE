@@ -40,7 +40,7 @@ export function MetricsPanel() {
     { label: "Videos", value: metrics?.videos ?? 0, icon: Database },
     { label: "IA 7 dias", value: metrics?.aiCalls7d ?? 0, icon: Brain },
     { label: "Tokens estimados", value: metrics?.aiTokenEstimate7d ?? 0, icon: Brain },
-    { label: "Storage", value: `${(((metrics?.storageBytes ?? 0) / 1024 / 1024)).toFixed(1)} MB`, icon: HardDrive },
+    { label: "Arquivos", value: `${(((metrics?.storageBytes ?? 0) / 1024 / 1024)).toFixed(1)} MB`, icon: HardDrive },
   ];
 
   return (

@@ -77,9 +77,9 @@ export function ReportsPanel() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {error ? <div className="rounded-[16px] border border-destructive/30 bg-[#fff1f2] p-3 text-sm text-destructive">{error}</div> : null}
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-2 xl:grid-cols-5">
         {stats.map((stat) => (
           <Card key={stat.label}>
             <CardHeader className="pb-2">
@@ -99,8 +99,8 @@ export function ReportsPanel() {
           <CardContent className="space-y-3">
             {data.weeklyEvolution.map((week) => (
               <div key={week.label}>
-                <div className="mb-1 flex justify-between text-sm">
-                  <span>{week.label}</span>
+                <div className="mb-1 flex flex-col gap-1 text-sm sm:flex-row sm:justify-between">
+                  <span className="break-words">{week.label}</span>
                   <span>{week.completed} concluida(s)</span>
                 </div>
                 <div className="h-3 rounded-full bg-[#e8f4ef]">
@@ -119,8 +119,8 @@ export function ReportsPanel() {
           </CardHeader>
           <CardContent className="space-y-2">
             {data.themes.map((theme) => (
-              <div key={theme.theme} className="flex items-center justify-between rounded-[14px] border bg-white p-3 text-sm">
-                <span className="font-semibold text-[#14352f]">{theme.theme}</span>
+              <div key={theme.theme} className="flex items-center justify-between gap-3 rounded-[14px] border bg-white p-3 text-sm">
+                <span className="break-words font-semibold text-[#14352f]">{theme.theme}</span>
                 <Badge>{theme.count}</Badge>
               </div>
             ))}

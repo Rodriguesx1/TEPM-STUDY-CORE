@@ -32,7 +32,7 @@ export default async function DashboardPage() {
           <StatCard label="PDFs enviados" value={String(documents.count ?? 0)} detail="Arquivos processados" />
           <StatCard label="Anotacoes" value={String(notes.count ?? 0)} detail="Caderno terapeutico" />
           <StatCard label="Trilhas" value={String(paths.count ?? 0)} detail="Planos de estudo ativos" />
-          <StatCard label="Licenca" value={getLicenseLabel(context.license, context.isAdmin)} detail="Controle real no Supabase" />
+          <StatCard label="Licenca" value={getLicenseLabel(context.license, context.isAdmin)} detail="Controle real da plataforma" />
         </div>
         <Card>
           <CardHeader>

@@ -10,7 +10,7 @@ export function getSupabasePublicConfig() {
 export function assertSupabasePublicConfig() {
   const config = getSupabasePublicConfig();
   if (!config.url || !config.anonKey) {
-    throw new Error("Supabase nao configurado. Defina NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY.");
+    throw new Error("Ambiente de dados nao configurado. Defina as variaveis publicas de conexao no painel de deploy.");
   }
   return config as { url: string; anonKey: string };
 }

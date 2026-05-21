@@ -30,7 +30,7 @@ export function AuthForm({ initialMode = "login" }: { initialMode?: "login" | "s
 
       if (result.error) throw result.error;
       if (mode === "signup") {
-        setMessage("Cadastro enviado. Confirme o e-mail caso o Supabase exija confirmacao.");
+        setMessage("Cadastro enviado. Confirme o e-mail caso a plataforma solicite validacao.");
       } else {
         router.replace("/dashboard");
         router.refresh();

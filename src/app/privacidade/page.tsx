@@ -18,7 +18,7 @@ export default function PrivacyPolicyPage() {
           <CardHeader><CardTitle>Dados tratados</CardTitle></CardHeader>
           <CardContent className="space-y-3 text-sm leading-7 text-muted-foreground">
             <p>Tratamos dados de conta, licencas, arquivos enviados, transcricoes, chunks, embeddings, notas, mensagens, eventos de estudo, logs tecnicos e consentimentos.</p>
-            <p>Chaves de API e service role permanecem apenas no servidor. O navegador usa somente configuracoes publicas necessarias para autenticacao Supabase.</p>
+            <p>Chaves de API e credenciais administrativas permanecem apenas no servidor. O navegador usa somente configuracoes publicas necessarias para autenticacao.</p>
           </CardContent>
         </Card>
         <Card>
@@ -31,7 +31,7 @@ export default function PrivacyPolicyPage() {
         <Card>
           <CardHeader><CardTitle>Seguranca</CardTitle></CardHeader>
           <CardContent className="space-y-3 text-sm leading-7 text-muted-foreground">
-            <p>Usamos RLS, buckets privados, validacao server-side, rate limit, logs estruturados e isolamento por `user_id`.</p>
+            <p>Usamos politicas de isolamento, arquivos privados, validacao server-side, rate limit, logs estruturados e separacao por usuario.</p>
             <p>Dados podem ser processados por provedores de IA configurados no servidor para gerar embeddings, transcricoes e respostas baseadas nos materiais autorizados.</p>
           </CardContent>
         </Card>

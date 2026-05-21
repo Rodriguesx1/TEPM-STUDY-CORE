@@ -167,9 +167,9 @@ export function StudyCalendarPanel() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {message ? <div className="rounded-[16px] border border-[#cfe5dc] bg-[#e8f4ef] p-3 text-sm text-[#14352f]">{message}</div> : null}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-base"><Trophy className="h-4 w-4 text-[#b79a45]" /> Nivel</CardTitle>
@@ -196,8 +196,8 @@ export function StudyCalendarPanel() {
         </Card>
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-[0.95fr_1.05fr]">
-        <div className="space-y-5">
+      <div className="grid gap-4 sm:gap-5 xl:grid-cols-[0.95fr_1.05fr]">
+        <div className="space-y-4 sm:space-y-5">
           <Card>
             <CardHeader>
               <CardTitle>Criar tarefa de estudo</CardTitle>
@@ -255,7 +255,7 @@ export function StudyCalendarPanel() {
                 <CardTitle>Calendario terapeutico</CardTitle>
                 <CardDescription>Visual mensal, semanal ou lista com tarefas reais.</CardDescription>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {(["list", "week", "month"] as const).map((item) => (
                   <Button key={item} type="button" size="sm" variant={view === item ? "primary" : "outline"} onClick={() => setView(item)}>
                     {item === "list" ? "Lista" : item === "week" ? "Semana" : "Mes"}
@@ -269,9 +269,9 @@ export function StudyCalendarPanel() {
             {visibleTasks.map((task) => (
               <article key={task.id} className="rounded-[16px] border bg-[#fbf7f3] p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <h3 className="font-semibold text-[#2a1026]">{task.title}</h3>
-                    {task.description ? <p className="mt-1 text-sm text-muted-foreground">{task.description}</p> : null}
+                  <div className="min-w-0">
+                    <h3 className="break-words font-semibold text-[#2a1026]">{task.title}</h3>
+                    {task.description ? <p className="mt-1 break-words text-sm text-muted-foreground">{task.description}</p> : null}
                     <div className="mt-2 flex flex-wrap gap-2">
                       <Badge>{task.task_type}</Badge>
                       <Badge>{task.priority}</Badge>
@@ -291,7 +291,7 @@ export function StudyCalendarPanel() {
         </Card>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-4 sm:gap-5 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Sessao terapeutica simulada</CardTitle>

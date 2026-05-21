@@ -41,7 +41,7 @@ export async function answerWithFallback(prompt: string) {
         Authorization: `Bearer ${openRouterKey}`,
         "Content-Type": "application/json",
         "HTTP-Referer": getEnv("NEXT_PUBLIC_APP_URL") ?? "http://localhost:3000",
-        "X-Title": "TEPM Study Core",
+        "X-Title": "TEPM Study",
       },
       body: JSON.stringify({
         model: getEnv("OPENROUTER_MODEL") ?? "google/gemini-2.0-flash-001",
@@ -134,6 +134,6 @@ export async function classifyDocumentCategory(text: string) {
   if (/(apostila|m[oó]dulo|aula|cap[ií]tulo|exerc[ií]cio|avalia[cç][aã]o)/i.test(lower)) return "Apostila e estudo";
   if (/(resumo|anota[cç][aã]o|insight|observa[cç][aã]o)/i.test(lower)) return "Resumo e anotacao";
   if (/(caso pr[aá]tico|estudo de caso|exemplo cl[ií]nico)/i.test(lower)) return "Caso pratico";
-  if (/(grupo|comunidade|sala|membro|convite)/i.test(lower)) return "Comunidade";
+  if (/(grupo|comunidade|sala|membro|codigo)/i.test(lower)) return "Comunidade";
   return "Outros";
 }

@@ -26,7 +26,7 @@ export default async function AdminPage() {
       <div className="space-y-6">
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <StatCard label="Usuarios" value={String(profiles.length)} detail="Perfis cadastrados" />
-          <StatCard label="Licencas" value={String(licenses.count ?? 0)} detail="Planos e convites" />
+          <StatCard label="Licencas" value={String(licenses.count ?? 0)} detail="Planos e acessos" />
           <StatCard label="Uploads" value={String(documents.count ?? 0)} detail="Arquivos monitorados" />
           <StatCard label="Logs" value={String(logs.count ?? 0)} detail="Eventos auditaveis" />
         </div>
@@ -37,7 +37,7 @@ export default async function AdminPage() {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              Operacoes sensiveis rodam no servidor com service role e politicas RLS. Este painel nao expoe chaves administrativas ao navegador.
+              Operacoes sensiveis rodam no servidor com credenciais protegidas e politicas de acesso. Este painel nao expoe chaves administrativas ao navegador.
             </p>
           </CardContent>
         </Card>

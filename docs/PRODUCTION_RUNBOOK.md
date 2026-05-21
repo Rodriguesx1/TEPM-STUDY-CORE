@@ -1,10 +1,10 @@
-# TEPM Study Core - Runbook de Producao
+# TEPM Study - Runbook de Producao
 
 ## Ambientes
 
-- `development`: uso local com `.env.local`, Supabase de desenvolvimento e `NEXT_PUBLIC_APP_URL=http://localhost:3000`.
-- `staging`: projeto Vercel separado ou branch preview, Supabase staging, chaves separadas e dados anonimizados.
-- `production`: Vercel production, Supabase production, buckets privados e variaveis protegidas.
+- `development`: uso local com `.env.local`, banco de desenvolvimento e `NEXT_PUBLIC_APP_URL=http://localhost:3000`.
+- `staging`: projeto Vercel separado ou branch preview, banco staging, chaves separadas e dados anonimizados.
+- `production`: Vercel production, banco production, buckets privados e variaveis protegidas.
 
 ## Variaveis obrigatorias
 
@@ -22,7 +22,7 @@
 
 ## Deploy e rollback
 
-1. Aplicar migrations no Supabase antes do deploy.
+1. Aplicar migrations no banco antes do deploy.
 2. Rodar `npm run lint`, `npm run typecheck` e `npm run build`.
 3. Publicar com `vercel --prod`.
 4. Validar `/`, `/login`, `/dashboard`, upload, chat e admin.
@@ -36,7 +36,7 @@
 
 ## Backup e recuperacao
 
-- Ativar PITR/backup diario no Supabase.
+- Ativar PITR/backup diario no banco.
 - Exportar `public` e storage privado periodicamente.
 - Registrar testes de restauracao em `backup_jobs`.
 - Nunca remover dados de usuario sem registro em `privacy_logs` e `deletion_requests`.

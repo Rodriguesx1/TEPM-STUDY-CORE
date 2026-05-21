@@ -40,7 +40,7 @@ export function SlidesPanel({ projects, pages }: { projects: SlideProject[]; pag
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div className="rounded-[18px] border bg-white p-4">
         <h3 className="font-semibold text-[#183c35]">Gerar apresentacao editavel</h3>
         <div className="mt-3 space-y-3">
@@ -51,10 +51,10 @@ export function SlidesPanel({ projects, pages }: { projects: SlideProject[]; pag
       </div>
       {projects.map((project) => (
         <article key={project.id} className="rounded-[18px] border bg-white p-4">
-          <h3 className="font-serif text-xl font-bold text-[#183c35]">{project.title}</h3>
+          <h3 className="break-words font-serif text-xl font-bold text-[#183c35]">{project.title}</h3>
           <div className="mt-4 grid gap-3 md:grid-cols-2">
             {(pagesByProject.get(project.id) ?? []).map((page) => (
-              <div key={page.id} className="rounded-[14px] bg-[#eef8f2] p-4">
+              <div key={page.id} className="min-w-0 rounded-[14px] bg-[#eef8f2] p-3 sm:p-4">
                 <Input defaultValue={page.title} aria-label="Titulo do slide" />
                 <Textarea className="mt-3" defaultValue={page.body} aria-label="Texto do slide" />
                 <Textarea className="mt-3" defaultValue={page.speaker_notes ?? ""} aria-label="Notas do apresentador" />
@@ -64,7 +64,7 @@ export function SlidesPanel({ projects, pages }: { projects: SlideProject[]; pag
           {project.markdown ? (
             <details className="mt-4 rounded-[14px] bg-[#eef8f2] p-4">
               <summary className="cursor-pointer font-semibold text-[#183c35]">Exportar Markdown</summary>
-              <pre className="mt-3 whitespace-pre-wrap text-sm text-muted-foreground">{project.markdown}</pre>
+              <pre className="mt-3 whitespace-pre-wrap break-words text-sm text-muted-foreground">{project.markdown}</pre>
             </details>
           ) : null}
         </article>

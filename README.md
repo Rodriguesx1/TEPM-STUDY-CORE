@@ -1,4 +1,4 @@
-# TEPM Study Core
+# TEPM Study
 
 SaaS privado de estudos terapeuticos com IA, biblioteca de PDFs, memoria vetorial, licencas, comunidade interna e painel admin.
 
@@ -8,7 +8,7 @@ SaaS privado de estudos terapeuticos com IA, biblioteca de PDFs, memoria vetoria
 - TypeScript
 - TailwindCSS
 - Componentes UI internos inspirados em Shadcn/UI
-- Supabase Auth, PostgreSQL, Storage e RLS
+- Autenticacao, banco relacional, storage privado e politicas de acesso
 - pgvector
 - Gemini API com fallback OpenRouter
 
@@ -30,7 +30,7 @@ GEMINI_API_KEY=
 OPENROUTER_API_KEY=
 ```
 
-3. Aplique as migrations em um projeto Supabase com pgvector:
+3. Aplique as migrations no banco PostgreSQL com suporte vetorial:
 
 ```bash
 supabase db push
@@ -47,7 +47,7 @@ npm run dev
 ## Segurança e LGPD
 
 - Dados de usuario ficam isolados por `user_id`.
-- Tabelas sensiveis usam RLS.
+- Tabelas sensiveis usam politicas de isolamento por usuario.
 - Chave service role fica somente no servidor.
 - Upload de PDF exige consentimento operacional e bucket privado.
 - Chat IA exige licenca ativa e usa apenas chunks do usuario autenticado.
@@ -55,11 +55,11 @@ npm run dev
 
 ## Checklist funcional
 
-- Home e login carregam sem Supabase configurado.
-- Login real exige Supabase Auth.
+- Home e login carregam sem o ambiente de dados configurado.
+- Login real exige o provedor de autenticacao configurado.
 - Dashboard, biblioteca, chat, caderno, trilhas, comunidade e admin exigem sessão.
 - Upload aceita somente PDF e respeita `MAX_UPLOAD_MB`.
-- PDF e salvo no Storage, extraido com `pdf-parse`, dividido em chunks e gravado em `document_chunks`.
+- PDF e salvo em storage privado, extraido com `pdf-parse`, dividido em chunks e gravado em `document_chunks`.
 - Embeddings usam Gemini quando `GEMINI_API_KEY` existe.
 - Chat consulta chunks do usuario e responde via Gemini, com fallback OpenRouter.
 - Licencas bloqueiam recursos premium quando expiradas ou ausentes para usuarios comuns.
@@ -68,8 +68,8 @@ npm run dev
 
 ## Pendencias para produção
 
-- Configurar Supabase remoto e aplicar migrations.
+- Configurar banco remoto e aplicar migrations.
 - Criar usuario admin inicial com SQL controlado.
-- Validar RLS diretamente no banco com usuarios reais.
+- Validar politicas de isolamento diretamente no banco com usuarios reais.
 - Publicar Edge Functions para processamento pesado de video/transcricao.
 - Adicionar Playwright e testes automatizados depois da infra real estar conectada.

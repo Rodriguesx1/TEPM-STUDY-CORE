@@ -73,7 +73,7 @@ export function CommunityPanel({ initialRooms }: { initialRooms: RoomRow[] }) {
   const activeRoom = rooms.map(getRoom).find((room) => room?.id === activeRoomId);
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[0.8fr_1.2fr]">
+    <div className="grid gap-4 sm:gap-5 xl:grid-cols-[0.8fr_1.2fr]">
       <div className="space-y-4">
         <div className="rounded-[18px] border bg-white p-4">
           <h3 className="font-semibold text-[#183c35]">Criar sala</h3>
@@ -85,9 +85,9 @@ export function CommunityPanel({ initialRooms }: { initialRooms: RoomRow[] }) {
         </div>
         <div className="rounded-[18px] border bg-white p-4">
           <h3 className="font-semibold text-[#183c35]">Entrar por codigo</h3>
-          <div className="mt-3 flex gap-2">
+          <div className="mt-3 flex flex-col gap-2 sm:flex-row">
             <Input placeholder="CODIGO" value={code} onChange={(event) => setCode(event.target.value.toUpperCase())} />
-            <Button type="button" onClick={joinRoom}>Entrar</Button>
+            <Button type="button" onClick={joinRoom} className="sm:w-auto">Entrar</Button>
           </div>
         </div>
         {notice ? <p className="rounded-[14px] bg-secondary p-3 text-sm text-secondary-foreground">{notice}</p> : null}
@@ -95,8 +95,8 @@ export function CommunityPanel({ initialRooms }: { initialRooms: RoomRow[] }) {
           {rooms.map((row) => {
             const room = getRoom(row);
             return room ? (
-              <button key={room.id} type="button" onClick={() => loadMessages(room.id)} className="block w-full rounded-[16px] border bg-white p-4 text-left">
-                <span className="font-semibold text-[#183c35]">{room.name}</span>
+              <button key={room.id} type="button" onClick={() => loadMessages(room.id)} className="block w-full min-w-0 rounded-[16px] border bg-white p-4 text-left">
+                <span className="break-words font-semibold text-[#183c35]">{room.name}</span>
                 <span className="mt-1 block text-xs text-muted-foreground">{row.role} {room.is_locked ? "- bloqueada" : ""}</span>
               </button>
             ) : null;
@@ -107,13 +107,13 @@ export function CommunityPanel({ initialRooms }: { initialRooms: RoomRow[] }) {
         <h3 className="font-semibold text-[#183c35]">{activeRoom?.name ?? "Selecione uma sala"}</h3>
         <div className="mt-4 min-h-64 space-y-3 rounded-[14px] bg-[#eef8f2] p-4">
           {messages.map((message) => (
-            <p key={message.id} className="rounded-[12px] bg-white/80 p-3 text-sm text-muted-foreground">{message.body}</p>
+            <p key={message.id} className="break-words rounded-[12px] bg-white/80 p-3 text-sm text-muted-foreground">{message.body}</p>
           ))}
           {!messages.length ? <p className="text-sm text-muted-foreground">Nenhuma mensagem ainda.</p> : null}
         </div>
-        <div className="mt-3 flex gap-2">
+        <div className="mt-3 flex flex-col gap-2 sm:flex-row">
           <Input placeholder="Mensagem" value={body} onChange={(event) => setBody(event.target.value)} />
-          <Button type="button" onClick={sendMessage} disabled={!activeRoomId}>Enviar</Button>
+          <Button type="button" onClick={sendMessage} disabled={!activeRoomId} className="sm:w-auto">Enviar</Button>
         </div>
       </div>
     </div>

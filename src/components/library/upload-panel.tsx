@@ -75,7 +75,7 @@ export function UploadPanel() {
     <Card>
       <CardHeader>
         <CardTitle>Upload seguro de PDF</CardTitle>
-        <CardDescription>O arquivo e salvo no Storage, registrado por user_id e enviado ao processamento IA.</CardDescription>
+        <CardDescription>O arquivo e salvo em ambiente privado, isolado por usuario e enviado ao processamento IA.</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={submit} className="space-y-4">

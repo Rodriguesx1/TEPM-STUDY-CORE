@@ -109,7 +109,7 @@ export async function POST(request: Request) {
     const cacheKey = buildAiCacheKey(auth.user.id, question, sources);
     const cached = hasContext ? await getCachedAiAnswer(admin, auth.user.id, cacheKey) : null;
     const prompt = [
-      "Voce e a Mentora IA do TEPM Study Core.",
+      "Voce e a Mentora IA do TEPM Study.",
       "Responda em portugues, com cuidado terapeutico, sem prometer diagnostico medico.",
       "Modo RAG estrito: use somente o contexto autorizado do usuario para responder sobre os materiais enviados.",
       "Se o contexto nao responder a pergunta, diga claramente que esse conteudo nao foi encontrado nos PDFs processados.",

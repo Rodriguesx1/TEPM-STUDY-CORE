@@ -23,7 +23,7 @@ export function AppShell({ children, context }: { children: React.ReactNode; con
     <div className="min-h-dvh">
       <aside className="fixed inset-y-0 left-0 z-20 hidden w-72 border-r border-white/60 bg-[#14352f]/95 p-5 text-white lg:block">
         <Link href="/dashboard" className="block">
-          <p className="font-serif text-2xl font-bold">TEPM Study Core</p>
+          <p className="font-serif text-2xl font-bold">TEPM Study</p>
           <p className="mt-1 text-xs uppercase tracking-[0.24em] text-[#e2c875]">Therapeutic AI</p>
         </Link>
         <nav className="mt-8 space-y-2">
@@ -39,17 +39,11 @@ export function AppShell({ children, context }: { children: React.ReactNode; con
           ))}
           {context.isAdmin ? (
             <>
-              <Link
-                href="/admin"
-                className="flex items-center gap-3 rounded-[14px] px-3 py-3 text-sm font-medium text-white/78 transition hover:bg-white/10 hover:text-white"
-              >
+              <Link href="/admin" className="flex items-center gap-3 rounded-[14px] px-3 py-3 text-sm font-medium text-white/78 transition hover:bg-white/10 hover:text-white">
                 <Shield className="h-4 w-4 text-[#e2c875]" />
                 Admin Master
               </Link>
-              <Link
-                href="/admin/billing"
-                className="flex items-center gap-3 rounded-[14px] px-3 py-3 text-sm font-medium text-white/78 transition hover:bg-white/10 hover:text-white"
-              >
+              <Link href="/admin/billing" className="flex items-center gap-3 rounded-[14px] px-3 py-3 text-sm font-medium text-white/78 transition hover:bg-white/10 hover:text-white">
                 <CreditCard className="h-4 w-4 text-[#e2c875]" />
                 Financeiro
               </Link>
@@ -58,15 +52,15 @@ export function AppShell({ children, context }: { children: React.ReactNode; con
         </nav>
       </aside>
       <main className="min-h-dvh lg:pl-72">
-        <header className="sticky top-0 z-10 border-b border-white/60 bg-white/76 px-4 py-3 backdrop-blur md:px-8">
+        <header className="sticky top-0 z-10 border-b border-white/60 bg-white/82 px-3 py-3 backdrop-blur sm:px-4 md:px-8">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="font-serif text-xl font-bold text-[#183c35]">Centro de estudos terapêuticos</p>
-              <p className="text-sm text-muted-foreground">{context.email}</p>
+            <div className="min-w-0">
+              <p className="font-serif text-lg font-bold text-[#183c35] sm:text-xl">Centro de estudos terapeuticos</p>
+              <p className="truncate text-xs text-muted-foreground sm:text-sm">{context.email}</p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex shrink-0 items-center gap-2">
               <Badge className={context.hasPremiumAccess ? "border-[#d7bb5f] text-[#795b13]" : "text-destructive"}>
-                {context.isAdmin ? "Admin" : context.hasPremiumAccess ? "Licença ativa" : "Acesso limitado"}
+                {context.isAdmin ? "Admin" : context.hasPremiumAccess ? "Licenca ativa" : "Acesso limitado"}
               </Badge>
               <form action="/auth/signout" method="post">
                 <Button variant="outline" size="sm" type="submit">
@@ -75,17 +69,16 @@ export function AppShell({ children, context }: { children: React.ReactNode; con
               </form>
             </div>
           </div>
-          <nav className="mt-3 flex gap-2 overflow-x-auto lg:hidden">
+          <nav className="mt-3 flex gap-2 overflow-x-auto pb-1 lg:hidden">
             {nav.map((item) => (
-              <Link key={item.href} href={item.href} className="rounded-full bg-white px-3 py-2 text-xs font-semibold">
+              <Link key={item.href} href={item.href} className="shrink-0 rounded-full bg-white px-3 py-2 text-xs font-semibold shadow-sm">
                 {item.label}
               </Link>
             ))}
           </nav>
         </header>
-        <div className="p-4 pb-12 md:p-8 md:pb-14">{children}</div>
+        <div className="p-3 pb-10 sm:p-4 sm:pb-12 md:p-8 md:pb-14">{children}</div>
       </main>
     </div>
   );
 }
-

@@ -37,12 +37,13 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --font-sans: "Inter", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Georgia", "Times New Roman", serif;
+  --font-sans: "Aptos", "Avenir Next", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", "Georgia", "Times New Roman", serif;
 }
 
 * {
   border-color: var(--border);
+  min-width: 0;
 }
 
 html {
@@ -57,7 +58,9 @@ body {
     radial-gradient(circle at top left, rgba(199, 166, 75, 0.18), transparent 30rem),
     linear-gradient(135deg, #f3fbf6 0%, #e8f5ee 48%, #eef4ff 100%);
   color: var(--foreground);
-  font-family: "Inter", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Aptos", "Avenir Next", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
 }
 
 button,
@@ -65,4 +68,44 @@ input,
 textarea,
 select {
   font: inherit;
+}
+
+h1,
+h2,
+h3,
+.font-serif {
+  font-family: "Cormorant Garamond", "Georgia", "Times New Roman", serif;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+p,
+span,
+li,
+label,
+input,
+textarea,
+select,
+button {
+  letter-spacing: 0;
+}
+
+a,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+li {
+  overflow-wrap: anywhere;
+}
+
+.premium-glow {
+  box-shadow:
+    0 0 0 1px rgba(207, 226, 216, 0.82),
+    0 22px 70px rgba(47, 125, 104, 0.22),
+    0 0 55px rgba(199, 166, 75, 0.18);
 }
