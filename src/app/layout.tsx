@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL;
+const siteUrl = rawAppUrl && !rawAppUrl.includes("localhost") ? rawAppUrl : "https://tepmstudy.vercel.app";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://tepmstudy.vercel.app"),
+  metadataBase: new URL(siteUrl),
   applicationName: "TEPM Study",
   alternates: {
     canonical: "/",
