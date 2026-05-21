@@ -1,5 +1,5 @@
 export type UserRole = "user" | "admin";
-export type LicenseStatus = "active" | "trial" | "expired" | "blocked";
+export type LicenseStatus = "active" | "trial" | "expired" | "blocked" | "lifetime";
 export type DocumentStatus = "uploaded" | "processing" | "processed" | "failed";
 
 export type Profile = {
@@ -17,7 +17,7 @@ export type License = {
   invite_code: string | null;
   status: LicenseStatus;
   starts_at: string;
-  expires_at: string;
+  expires_at: string | null;
   created_by: string | null;
   created_at: string;
 };

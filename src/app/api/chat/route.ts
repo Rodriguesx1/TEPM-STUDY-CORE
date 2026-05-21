@@ -11,7 +11,14 @@ export async function POST(request: Request) {
     const { question } = (await request.json()) as { question?: string };
     if (!question?.trim()) return NextResponse.json({ error: "Pergunta obrigatoria." }, { status: 400 });
 
-    const { data: profile } = await supabase
+    const profileResult = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", auth.user.id)
+      .maybeSingle();
+    const { data: profile } = profileResult.data
+      ? profileResult
+      : await supabase
       .from("users_profiles")
       .select("role")
       .eq("id", auth.user.id)
@@ -23,8 +30,8 @@ export async function POST(request: Request) {
         .from("licenses")
         .select("id")
         .eq("user_id", auth.user.id)
-        .in("status", ["active", "trial"])
-        .gte("expires_at", new Date().toISOString())
+        .in("status", ["active", "trial", "lifetime"])
+        .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`)
         .maybeSingle();
       if (!license) return NextResponse.json({ error: "Licenca ativa obrigatoria para usar IA." }, { status: 403 });
     }

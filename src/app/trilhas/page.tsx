@@ -1,11 +1,11 @@
 import { AppShell } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireUser } from "@/lib/auth/guards";
+import { requirePremium } from "@/lib/auth/guards";
 import { getServerSupabase } from "@/lib/supabase/server";
 
 export default async function StudyPathsPage() {
-  const context = await requireUser();
+  const context = await requirePremium();
   const supabase = await getServerSupabase();
   const { data, error } = await supabase.from("study_paths").select("*").eq("user_id", context.userId).order("created_at", { ascending: false });
 

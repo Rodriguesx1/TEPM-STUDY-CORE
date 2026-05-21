@@ -1,19 +1,20 @@
 import Link from "next/link";
-import { AppShell } from "@/components/layout/app-shell";
 import { StatCard } from "@/components/dashboard/stat-card";
+import { AppShell } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireUser } from "@/lib/auth/guards";
+import { getLicenseLabel } from "@/lib/licenses/guards";
 import { getServerSupabase } from "@/lib/supabase/server";
 
 export default async function DashboardPage() {
   const context = await requireUser();
   const supabase = await getServerSupabase();
-  const [documents, notes, paths, rooms] = await Promise.all([
+  const [documents, notes, paths, activities] = await Promise.all([
     supabase.from("documents").select("id", { count: "exact", head: true }).eq("user_id", context.userId),
     supabase.from("notes").select("id", { count: "exact", head: true }).eq("user_id", context.userId),
     supabase.from("study_paths").select("id", { count: "exact", head: true }).eq("user_id", context.userId),
-    supabase.from("room_members").select("room_id", { count: "exact", head: true }).eq("user_id", context.userId),
+    supabase.from("audit_logs").select("id,action,created_at").eq("user_id", context.userId).order("created_at", { ascending: false }).limit(5),
   ]);
 
   return (
@@ -22,26 +23,47 @@ export default async function DashboardPage() {
         {!context.hasPremiumAccess ? (
           <Card className="border-destructive/30 bg-[#fff1f2]">
             <CardHeader>
-              <CardTitle>Licença necessária</CardTitle>
-              <CardDescription>Sua conta existe, mas os recursos premium exigem licença ativa ou trial válido.</CardDescription>
+              <CardTitle>Licenca necessaria</CardTitle>
+              <CardDescription>Sua conta existe, mas os recursos premium exigem licenca ativa, vitalicia ou trial valido.</CardDescription>
             </CardHeader>
           </Card>
         ) : null}
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <StatCard label="Documentos" value={String(documents.count ?? 0)} detail="PDFs e textos processados" />
-          <StatCard label="Anotações" value={String(notes.count ?? 0)} detail="Caderno terapêutico" />
+          <StatCard label="PDFs enviados" value={String(documents.count ?? 0)} detail="Arquivos processados" />
+          <StatCard label="Anotacoes" value={String(notes.count ?? 0)} detail="Caderno terapeutico" />
           <StatCard label="Trilhas" value={String(paths.count ?? 0)} detail="Planos de estudo ativos" />
-          <StatCard label="Salas" value={String(rooms.count ?? 0)} detail="Comunidades privadas" />
+          <StatCard label="Licenca" value={getLicenseLabel(context.license, context.isAdmin)} detail="Controle real no Supabase" />
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>Próximas ações</CardTitle>
-            <CardDescription>Fluxos reais do MVP. Sem licença, as operações premium retornam bloqueio funcional.</CardDescription>
+            <CardTitle>Proximas acoes</CardTitle>
+            <CardDescription>Fluxos reais do MVP. Sem licenca, as operacoes premium retornam bloqueio funcional.</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-wrap gap-3">
-            <Link href="/biblioteca"><Button>Enviar PDF</Button></Link>
-            <Link href="/chat"><Button variant="secondary">Conversar com IA</Button></Link>
-            <Link href="/caderno"><Button variant="outline">Abrir caderno</Button></Link>
+            <Link href="/biblioteca">
+              <Button>Enviar PDF</Button>
+            </Link>
+            <Link href="/chat">
+              <Button variant="secondary">Conversar com IA</Button>
+            </Link>
+            <Link href="/caderno">
+              <Button variant="outline">Abrir caderno</Button>
+            </Link>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Ultimas atividades</CardTitle>
+            <CardDescription>Logs reais de acoes criticas do usuario.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {activities.data?.map((activity) => (
+              <div key={activity.id} className="rounded-[14px] border bg-white p-3 text-sm">
+                <p className="font-semibold text-[#35152f]">{activity.action}</p>
+                <p className="text-xs text-muted-foreground">{new Date(activity.created_at).toLocaleString("pt-BR")}</p>
+              </div>
+            ))}
+            {!activities.data?.length ? <p className="text-sm text-muted-foreground">Nenhuma atividade registrada ainda.</p> : null}
           </CardContent>
         </Card>
       </div>

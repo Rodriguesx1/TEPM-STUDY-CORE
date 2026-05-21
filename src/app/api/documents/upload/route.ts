@@ -10,6 +10,22 @@ export async function POST(request: Request) {
     const { data: auth } = await supabase.auth.getUser();
     if (!auth.user) return NextResponse.json({ error: "Login obrigatorio." }, { status: 401 });
 
+    const profileResult = await supabase.from("profiles").select("role").eq("id", auth.user.id).maybeSingle();
+    const { data: profile } = profileResult.data
+      ? profileResult
+      : await supabase.from("users_profiles").select("role").eq("id", auth.user.id).maybeSingle();
+    const isAdmin = profile?.role === "admin";
+    if (!isAdmin) {
+      const { data: license } = await supabase
+        .from("licenses")
+        .select("id")
+        .eq("user_id", auth.user.id)
+        .in("status", ["active", "trial", "lifetime"])
+        .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`)
+        .maybeSingle();
+      if (!license) return NextResponse.json({ error: "Licenca ativa obrigatoria para upload de PDF." }, { status: 403 });
+    }
+
     const formData = await request.formData();
     const file = formData.get("file");
     if (!(file instanceof File)) return NextResponse.json({ error: "Arquivo PDF obrigatorio." }, { status: 400 });

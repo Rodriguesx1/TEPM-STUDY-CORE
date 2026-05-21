@@ -7,9 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { getBrowserSupabase } from "@/lib/supabase/client";
 
-export function AuthForm() {
+export function AuthForm({ initialMode = "login" }: { initialMode?: "login" | "signup" }) {
   const router = useRouter();
-  const [mode, setMode] = useState<"login" | "signup">("login");
+  const [mode, setMode] = useState<"login" | "signup">(initialMode);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -30,7 +30,7 @@ export function AuthForm() {
 
       if (result.error) throw result.error;
       if (mode === "signup") {
-        setMessage("Cadastro enviado. Confirme o e-mail caso o Supabase exija confirmação.");
+        setMessage("Cadastro enviado. Confirme o e-mail caso o Supabase exija confirmacao.");
       } else {
         router.replace("/dashboard");
         router.refresh();
@@ -46,7 +46,7 @@ export function AuthForm() {
     <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle>{mode === "login" ? "Entrar" : "Criar acesso"}</CardTitle>
-        <CardDescription>Use sua conta autorizada. Recursos premium dependem de licença ativa.</CardDescription>
+        <CardDescription>Use sua conta autorizada. Recursos premium dependem de licenca ativa.</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={submit} className="space-y-4">

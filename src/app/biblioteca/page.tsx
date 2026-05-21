@@ -2,13 +2,13 @@ import { UploadPanel } from "@/components/library/upload-panel";
 import { AppShell } from "@/components/layout/app-shell";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireUser } from "@/lib/auth/guards";
+import { requirePremium } from "@/lib/auth/guards";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { formatDate } from "@/lib/utils";
 import type { DocumentRecord } from "@/types/database";
 
 export default async function LibraryPage() {
-  const context = await requireUser();
+  const context = await requirePremium();
   const supabase = await getServerSupabase();
   const { data, error } = await supabase
     .from("documents")

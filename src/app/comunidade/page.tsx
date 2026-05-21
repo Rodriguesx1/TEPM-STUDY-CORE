@@ -1,10 +1,10 @@
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireUser } from "@/lib/auth/guards";
+import { requirePremium } from "@/lib/auth/guards";
 import { getServerSupabase } from "@/lib/supabase/server";
 
 export default async function CommunityPage() {
-  const context = await requireUser();
+  const context = await requirePremium();
   const supabase = await getServerSupabase();
   const { data, error } = await supabase
     .from("room_members")

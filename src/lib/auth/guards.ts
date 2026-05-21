@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getServerSupabase } from "@/lib/supabase/server";
+import { isLicenseActive } from "@/lib/licenses/guards";
 import type { License, Profile } from "@/types/database";
 
 export type SessionContext = {
@@ -18,18 +19,21 @@ export async function getSessionContext(): Promise<SessionContext | null> {
     if (userError || !userResult.user) return null;
 
     const userId = userResult.user.id;
-    const [{ data: profile }, { data: license }] = await Promise.all([
-      supabase.from("users_profiles").select("*").eq("id", userId).maybeSingle(),
+    const profileResult = await supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
+    const profile =
+      profileResult.data ??
+      (await supabase.from("users_profiles").select("*").eq("id", userId).maybeSingle()).data ??
+      null;
+
+    const { data: license } = await
       supabase
         .from("licenses")
         .select("*")
         .eq("user_id", userId)
-        .in("status", ["active", "trial"])
-        .gte("expires_at", new Date().toISOString())
+        .in("status", ["active", "trial", "lifetime"])
         .order("expires_at", { ascending: false })
         .limit(1)
-        .maybeSingle(),
-    ]);
+        .maybeSingle();
 
     const isAdmin = profile?.role === "admin";
     return {
@@ -38,11 +42,17 @@ export async function getSessionContext(): Promise<SessionContext | null> {
       profile: (profile as Profile | null) ?? null,
       license: (license as License | null) ?? null,
       isAdmin,
-      hasPremiumAccess: isAdmin || Boolean(license),
+      hasPremiumAccess: isAdmin || isLicenseActive((license as License | null) ?? null),
     };
   } catch {
     return null;
   }
+}
+
+export async function requirePremium() {
+  const context = await requireUser();
+  if (!context.hasPremiumAccess) redirect("/bloqueado");
+  return context;
 }
 
 export async function requireUser() {
