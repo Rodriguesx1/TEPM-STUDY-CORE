@@ -45,8 +45,14 @@
   border-color: var(--border);
 }
 
+html {
+  min-height: 100%;
+  overflow-y: auto;
+}
+
 body {
   min-height: 100vh;
+  overflow-x: hidden;
   background:
     radial-gradient(circle at top left, rgba(199, 166, 75, 0.22), transparent 30rem),
     linear-gradient(135deg, #fff8f3 0%, #f8edf3 45%, #eff0ff 100%);

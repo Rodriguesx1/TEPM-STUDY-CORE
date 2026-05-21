@@ -15,7 +15,7 @@ const nav = [
 
 export function AppShell({ children, context }: { children: React.ReactNode; context: SessionContext }) {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-dvh">
       <aside className="fixed inset-y-0 left-0 z-20 hidden w-72 border-r border-white/60 bg-[#211326]/95 p-5 text-white lg:block">
         <Link href="/dashboard" className="block">
           <p className="font-serif text-2xl font-bold">TEPM Study Core</p>
@@ -43,7 +43,7 @@ export function AppShell({ children, context }: { children: React.ReactNode; con
           ) : null}
         </nav>
       </aside>
-      <main className="lg:pl-72">
+      <main className="min-h-dvh lg:pl-72">
         <header className="sticky top-0 z-10 border-b border-white/60 bg-white/76 px-4 py-3 backdrop-blur md:px-8">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
@@ -69,7 +69,7 @@ export function AppShell({ children, context }: { children: React.ReactNode; con
             ))}
           </nav>
         </header>
-        <div className="p-4 md:p-8">{children}</div>
+        <div className="p-4 pb-12 md:p-8 md:pb-14">{children}</div>
       </main>
     </div>
   );
