@@ -4,6 +4,16 @@ import { useState } from "react";
 import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getBrowserSupabase } from "@/lib/supabase/client";
+
+async function readJsonResponse(response: Response) {
+  const text = await response.text();
+  try {
+    return JSON.parse(text) as { error?: string; message?: string };
+  } catch {
+    return { error: text || "Resposta invalida do servidor." };
+  }
+}
 
 export function UploadPanel() {
   const [file, setFile] = useState<File | null>(null);
@@ -17,15 +27,30 @@ export function UploadPanel() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
     setLoading(true);
     setMessage(null);
 
     try {
-      const response = await fetch("/api/documents/upload", { method: "POST", body: formData });
-      const payload = (await response.json()) as { error?: string; message?: string };
-      if (!response.ok) throw new Error(payload.error ?? "Falha no upload.");
+      if (file.type !== "application/pdf") throw new Error("Somente PDF e aceito.");
+      const supabase = getBrowserSupabase();
+      const { data: userResult, error: userError } = await supabase.auth.getUser();
+      if (userError || !userResult.user) throw new Error("Login obrigatorio para enviar PDF.");
+
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      const filePath = `${userResult.user.id}/${crypto.randomUUID()}-${safeName}`;
+      const upload = await supabase.storage.from("study-documents").upload(filePath, file, {
+        contentType: file.type,
+        upsert: false,
+      });
+      if (upload.error) throw upload.error;
+
+      const response = await fetch("/api/documents/process", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filePath, title: file.name, mimeType: file.type, size: file.size }),
+      });
+      const payload = await readJsonResponse(response);
+      if (!response.ok) throw new Error(payload.error ?? "Falha no processamento.");
       setMessage(payload.message ?? "PDF enviado e processamento iniciado.");
       setFile(null);
     } catch (error) {
