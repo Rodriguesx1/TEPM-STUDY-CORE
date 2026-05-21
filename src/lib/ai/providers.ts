@@ -5,9 +5,19 @@ export async function generateEmbedding(text: string) {
   const key = getEnv("GEMINI_API_KEY");
   if (!key) return null;
   const client = new GoogleGenerativeAI(key);
-  const model = client.getGenerativeModel({ model: "text-embedding-004" });
-  const result = await model.embedContent(text);
-  return result.embedding.values;
+  const models = ["embedding-001", "text-embedding-004"];
+
+  for (const modelName of models) {
+    try {
+      const model = client.getGenerativeModel({ model: modelName });
+      const result = await model.embedContent(text);
+      return result.embedding.values;
+    } catch {
+      // Keep PDF processing functional even when a provider/model is unavailable.
+    }
+  }
+
+  return null;
 }
 
 export async function answerWithFallback(prompt: string) {
