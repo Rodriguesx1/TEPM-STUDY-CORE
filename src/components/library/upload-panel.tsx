@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,6 +17,7 @@ async function readJsonResponse(response: Response) {
 }
 
 export function UploadPanel() {
+  const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -53,6 +55,7 @@ export function UploadPanel() {
       if (!response.ok) throw new Error(payload.error ?? "Falha no processamento.");
       setMessage(payload.message ?? "PDF enviado e processamento iniciado.");
       setFile(null);
+      router.refresh();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Nao foi possivel enviar o PDF.");
     } finally {

@@ -7,6 +7,8 @@ import { getServerSupabase } from "@/lib/supabase/server";
 import { formatDate } from "@/lib/utils";
 import type { DocumentRecord } from "@/types/database";
 
+export const dynamic = "force-dynamic";
+
 export default async function LibraryPage() {
   const context = await requirePremium();
   const supabase = await getServerSupabase();
