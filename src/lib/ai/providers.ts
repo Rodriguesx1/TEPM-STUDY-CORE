@@ -55,3 +55,47 @@ export async function answerWithFallback(prompt: string) {
 
   throw new Error("Nenhum provedor de IA configurado no servidor.");
 }
+
+const allowedCategories = [
+  "Terapia e clinica",
+  "Apostila e estudo",
+  "Resumo e anotacao",
+  "Caso pratico",
+  "Documento administrativo",
+  "Financeiro",
+  "Comunidade",
+  "Outros",
+];
+
+export async function classifyDocumentCategory(text: string) {
+  const sample = text.replace(/\s+/g, " ").trim().slice(0, 5000);
+  if (!sample) return "Outros";
+
+  try {
+    const result = await answerWithFallback(
+      [
+        "Classifique o conteudo do PDF em uma unica categoria.",
+        `Categorias permitidas: ${allowedCategories.join(", ")}.`,
+        "Responda somente com o nome exato de uma categoria permitida, sem explicacao.",
+        `Conteudo: ${sample}`,
+      ].join("\n\n"),
+    );
+    const normalized = result.answer.trim().replace(/^["']|["']$/g, "");
+    const match = allowedCategories.find((category) => category.toLowerCase() === normalized.toLowerCase());
+    if (match) return match;
+  } catch {
+    // Local fallback below keeps processing reliable.
+  }
+
+  const lower = sample.toLowerCase();
+  if (/(ordem de servi[cç]o|cnpj|cpf|valor|pagamento|cliente|dispositivo|reparo|nota fiscal)/i.test(lower)) {
+    return "Documento administrativo";
+  }
+  if (/(r\$|financeiro|custo|receita|despesa|boleto|fatura)/i.test(lower)) return "Financeiro";
+  if (/(terapia|terapeutic|paciente|sess[aã]o|clinica|diagn[oó]stico|interven[cç][aã]o)/i.test(lower)) return "Terapia e clinica";
+  if (/(apostila|m[oó]dulo|aula|cap[ií]tulo|exerc[ií]cio|avalia[cç][aã]o)/i.test(lower)) return "Apostila e estudo";
+  if (/(resumo|anota[cç][aã]o|insight|observa[cç][aã]o)/i.test(lower)) return "Resumo e anotacao";
+  if (/(caso pr[aá]tico|estudo de caso|exemplo cl[ií]nico)/i.test(lower)) return "Caso pratico";
+  if (/(grupo|comunidade|sala|membro|convite)/i.test(lower)) return "Comunidade";
+  return "Outros";
+}

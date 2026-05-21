@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { generateEmbedding } from "@/lib/ai/providers";
+import { classifyDocumentCategory, generateEmbedding } from "@/lib/ai/providers";
 import { chunkText, summarizeLocally } from "@/lib/documents/chunking";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { getServerSupabase } from "@/lib/supabase/server";
@@ -59,6 +59,7 @@ export async function POST(request: Request) {
     const text = parsed.text ?? "";
     const chunks = chunkText(text);
     const summary = summarizeLocally(text);
+    const category = await classifyDocumentCategory(text);
 
     for (const [index, content] of chunks.entries()) {
       const embedding = await generateEmbedding(content);
@@ -75,12 +76,12 @@ export async function POST(request: Request) {
 
     await admin
       .from("documents")
-      .update({ status: "processed", summary, theme: "PDF terapeutico" })
+      .update({ status: "processed", summary, theme: category })
       .eq("id", created.data.id)
       .eq("user_id", auth.user.id);
     await admin.from("audit_logs").insert({ user_id: auth.user.id, action: "document.processed", entity_type: "documents", entity_id: created.data.id });
 
-    return NextResponse.json({ message: `PDF processado com ${chunks.length} chunks.`, documentId: created.data.id });
+    return NextResponse.json({ message: `PDF processado com ${chunks.length} chunks na categoria ${category}.`, documentId: created.data.id, category });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Falha ao processar documento." }, { status: 500 });
   }
