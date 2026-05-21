@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BarChart3, BookOpen, Brain, CalendarDays, CreditCard, FileText, LayoutDashboard, MessageCircle, Presentation, Shield, ShieldCheck, Users, Video } from "lucide-react";
+import { BarChart3, BookOpen, Brain, CalendarDays, CreditCard, FileText, Focus, LayoutDashboard, MessageCircle, Presentation, Shield, ShieldCheck, Sparkles, Users, Video } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { SessionContext } from "@/lib/auth/guards";
@@ -9,7 +9,9 @@ const nav = [
   { href: "/biblioteca", label: "Biblioteca", icon: FileText },
   { href: "/dashboard/videos", label: "Videos", icon: Video },
   { href: "/chat", label: "Mentora IA", icon: Brain },
+  { href: "/dashboard/intelligence", label: "Inteligencia", icon: Sparkles },
   { href: "/trilhas", label: "Trilhas", icon: BookOpen },
+  { href: "/dashboard/productivity", label: "Produtividade", icon: Focus },
   { href: "/dashboard/calendar", label: "Calendario", icon: CalendarDays },
   { href: "/dashboard/reports", label: "Relatorios", icon: BarChart3 },
   { href: "/dashboard/privacy", label: "Privacidade", icon: ShieldCheck },

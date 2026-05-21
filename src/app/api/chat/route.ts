@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { buildAiCacheKey, getCachedAiAnswer, storeCachedAiAnswer } from "@/lib/ai/cache";
+import { buildAgentPrefix, decideAgent, safeRecordAgentRun, safeRecordAiCost } from "@/lib/ai/orchestrator";
 import { answerWithFallback } from "@/lib/ai/providers";
 import { retrieveRelevantContext } from "@/lib/ai/rag";
+import { safeCaptureMemoryEvent } from "@/lib/intelligence/memory";
 import { estimateTokens, logSystemEvent } from "@/lib/observability/logger";
 import { checkRateLimit, ipKey } from "@/lib/security/rate-limit";
 import { validateSameOrigin } from "@/lib/security/request-guard";
@@ -108,8 +110,10 @@ export async function POST(request: Request) {
     const hasContext = Boolean(context.trim());
     const cacheKey = buildAiCacheKey(auth.user.id, question, sources);
     const cached = hasContext ? await getCachedAiAnswer(admin, auth.user.id, cacheKey) : null;
+    const agentDecision = decideAgent(question);
     const prompt = [
       "Voce e a Mentora IA do TEPM Study.",
+      buildAgentPrefix(agentDecision),
       "Responda em portugues, com cuidado terapeutico, sem prometer diagnostico medico.",
       "Modo RAG estrito: use somente o contexto autorizado do usuario para responder sobre os materiais enviados.",
       "Se o contexto nao responder a pergunta, diga claramente que esse conteudo nao foi encontrado nos PDFs processados.",
@@ -169,8 +173,21 @@ export async function POST(request: Request) {
 
     await admin.from("audit_logs").insert({
       user_id: auth.user.id,
-      action: isAdmin ? `chat.${result.provider}.admin_unlimited` : `chat.${result.provider}`,
+      action: isAdmin ? `chat.${agentDecision.agent}.${result.provider}.admin_unlimited` : `chat.${agentDecision.agent}.${result.provider}`,
       entity_type: "ai",
+    });
+    await safeCaptureMemoryEvent({ admin, userId: auth.user.id, question, answer: result.answer, sourcesCount: sources.length });
+    await safeRecordAgentRun({ admin, userId: auth.user.id, decision: agentDecision, provider: result.provider, input: question, output: result.answer });
+    await safeRecordAiCost({
+      admin,
+      userId: auth.user.id,
+      provider: result.provider,
+      route: "/api/chat",
+      operation: agentDecision.taskType,
+      prompt,
+      answer: result.answer,
+      cached: Boolean(cached),
+      metadata: { agent: agentDecision.agent, source_count: sources.length },
     });
     await logSystemEvent(admin, {
       userId: auth.user.id,
@@ -181,6 +198,7 @@ export async function POST(request: Request) {
       durationMs: Date.now() - startedAt,
       metadata: {
         provider: result.provider,
+        agent: agentDecision.agent,
         cached: Boolean(cached),
         used_semantic_search: usedSemanticSearch,
         source_count: sources.length,

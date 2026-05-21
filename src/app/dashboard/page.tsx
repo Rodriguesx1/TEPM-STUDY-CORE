@@ -64,6 +64,12 @@ export default async function DashboardPage() {
             <Link href="/dashboard/reports">
               <Button variant="outline">Relatorios</Button>
             </Link>
+            <Link href="/dashboard/intelligence">
+              <Button variant="outline">Inteligencia</Button>
+            </Link>
+            <Link href="/dashboard/productivity">
+              <Button variant="outline">Foco</Button>
+            </Link>
           </CardContent>
         </Card>
         <Card>
