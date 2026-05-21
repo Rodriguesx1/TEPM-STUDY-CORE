@@ -33,3 +33,17 @@ export type DocumentRecord = {
   theme: string | null;
   created_at: string;
 };
+
+export type DocumentChunk = {
+  id: string;
+  user_id: string;
+  document_id: string;
+  chunk_index: number;
+  content: string;
+  token_count: number;
+  created_at: string;
+};
+
+export type DocumentWithChunks = DocumentRecord & {
+  chunks: DocumentChunk[];
+};
