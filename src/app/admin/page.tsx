@@ -8,10 +8,6 @@ import { getServerSupabase } from "@/lib/supabase/server";
 export default async function AdminPage() {
   const context = await requireAdmin();
   const supabase = await getServerSupabase();
-  const profileCount = await supabase.from("profiles").select("id", { count: "exact", head: true });
-  const legacyProfileCount = profileCount.error
-    ? await supabase.from("users_profiles").select("id", { count: "exact", head: true })
-    : null;
   const [licenses, documents, logs] = await Promise.all([
     supabase.from("licenses").select("id", { count: "exact", head: true }),
     supabase.from("documents").select("id", { count: "exact", head: true }),
@@ -28,7 +24,7 @@ export default async function AdminPage() {
     <AppShell context={context}>
       <div className="space-y-6">
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <StatCard label="Usuarios" value={String(profileCount.count ?? legacyProfileCount?.count ?? 0)} detail="Perfis cadastrados" />
+          <StatCard label="Usuarios" value={String(profiles.length)} detail="Perfis cadastrados" />
           <StatCard label="Licencas" value={String(licenses.count ?? 0)} detail="Planos e convites" />
           <StatCard label="Uploads" value={String(documents.count ?? 0)} detail="Arquivos monitorados" />
           <StatCard label="Logs" value={String(logs.count ?? 0)} detail="Eventos auditaveis" />
