@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSessionContext } from "@/lib/auth/guards";
 import { logSystemEvent } from "@/lib/observability/logger";
+import { validateSameOrigin } from "@/lib/security/request-guard";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 export async function GET() {
@@ -37,6 +38,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const originError = validateSameOrigin(request);
+  if (originError) return originError;
   const context = await getSessionContext();
   if (!context) return NextResponse.json({ error: "Login obrigatorio." }, { status: 401 });
 

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getSessionContext } from "@/lib/auth/guards";
 import { awardStudyPoints } from "@/lib/gamification/service";
 import { isLicenseActive } from "@/lib/licenses/guards";
+import { validateSameOrigin } from "@/lib/security/request-guard";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { getServerSupabase } from "@/lib/supabase/server";
 
@@ -95,6 +96,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const originError = validateSameOrigin(request);
+  if (originError) return originError;
   const context = await getSessionContext();
   if (!context) return NextResponse.json({ error: "Login obrigatorio." }, { status: 401 });
   if (!isPremiumAllowed(context)) return NextResponse.json({ error: "Licenca ativa obrigatoria para criar automacoes." }, { status: 402 });
@@ -194,6 +197,8 @@ export async function POST(request: Request) {
 }
 
 export async function PATCH(request: Request) {
+  const originError = validateSameOrigin(request);
+  if (originError) return originError;
   const context = await getSessionContext();
   if (!context) return NextResponse.json({ error: "Login obrigatorio." }, { status: 401 });
 

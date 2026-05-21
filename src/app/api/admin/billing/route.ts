@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSessionContext } from "@/lib/auth/guards";
+import { validateSameOrigin } from "@/lib/security/request-guard";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 function text(value: unknown, fallback = "") {
@@ -36,6 +37,8 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const originError = validateSameOrigin(request);
+    if (originError) return originError;
     const context = await getSessionContext();
     if (!context?.isAdmin) return NextResponse.json({ error: "Admin obrigatorio." }, { status: 403 });
 

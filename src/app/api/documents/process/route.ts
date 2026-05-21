@@ -3,6 +3,7 @@ import { classifyDocumentCategory, generateEmbedding } from "@/lib/ai/providers"
 import { chunkText, summarizeLocally } from "@/lib/documents/chunking";
 import { logSystemEvent } from "@/lib/observability/logger";
 import { checkRateLimit, ipKey } from "@/lib/security/rate-limit";
+import { validateSameOrigin } from "@/lib/security/request-guard";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { getEnv } from "@/lib/utils";
@@ -12,6 +13,8 @@ export async function POST(request: Request) {
   let createdDocumentId: string | null = null;
   let authenticatedUserId: string | null = null;
   try {
+    const originError = validateSameOrigin(request);
+    if (originError) return originError;
     const supabase = await getServerSupabase();
     const { data: auth } = await supabase.auth.getUser();
     if (!auth.user) return NextResponse.json({ error: "Login obrigatorio." }, { status: 401 });

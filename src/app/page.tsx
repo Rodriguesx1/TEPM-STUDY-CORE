@@ -119,6 +119,10 @@ export default function HomePage() {
             </CardContent>
           </Card>
         </div>
+        <footer className="mx-auto flex max-w-7xl flex-wrap gap-3 pb-8 text-sm text-muted-foreground">
+          <Link href="/termos" className="hover:text-[#14352f]">Termos de uso</Link>
+          <Link href="/privacidade" className="hover:text-[#14352f]">Politica de privacidade</Link>
+        </footer>
       </section>
     </main>
   );

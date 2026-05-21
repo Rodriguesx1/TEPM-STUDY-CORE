@@ -4,6 +4,7 @@ import { answerWithFallback } from "@/lib/ai/providers";
 import { retrieveRelevantContext } from "@/lib/ai/rag";
 import { estimateTokens, logSystemEvent } from "@/lib/observability/logger";
 import { checkRateLimit, ipKey } from "@/lib/security/rate-limit";
+import { validateSameOrigin } from "@/lib/security/request-guard";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { getServerSupabase } from "@/lib/supabase/server";
 
@@ -48,6 +49,8 @@ export async function POST(request: Request) {
   const startedAt = Date.now();
   let logUserId: string | null = null;
   try {
+    const originError = validateSameOrigin(request);
+    if (originError) return originError;
     const supabase = await getServerSupabase();
     const admin = getSupabaseAdmin();
     const { data: auth } = await supabase.auth.getUser();
