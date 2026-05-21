@@ -1,16 +1,24 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { ChevronDown, ChevronUp, FileCheck2 } from "lucide-react";
+import { Fragment, useMemo, useState } from "react";
+import { ChevronDown, ChevronUp, FileCheck2, Maximize2, Minimize2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils";
-import type { DocumentRecord } from "@/types/database";
+import type { DocumentWithChunks } from "@/types/database";
 
-export function DocumentAuditList({ documents }: { documents: DocumentRecord[] }) {
+function getDocumentContent(doc: DocumentWithChunks) {
+  return doc.chunks.length
+    ? doc.chunks.map((chunk) => chunk.content).join("\n\n")
+    : doc.summary ?? "Ainda nao ha conteudo extraido para este PDF.";
+}
+
+export function DocumentAuditList({ documents }: { documents: DocumentWithChunks[] }) {
   const [minimized, setMinimized] = useState(false);
+  const [opened, setOpened] = useState<Record<string, boolean>>({});
+  const [maximized, setMaximized] = useState<Record<string, boolean>>({});
   const grouped = useMemo(() => {
-    return documents.reduce<Record<string, DocumentRecord[]>>((acc, doc) => {
+    return documents.reduce<Record<string, DocumentWithChunks[]>>((acc, doc) => {
       const category = doc.theme || "Sem categoria";
       acc[category] = acc[category] ?? [];
       acc[category].push(doc);
@@ -60,23 +68,87 @@ export function DocumentAuditList({ documents }: { documents: DocumentRecord[] }
                       </tr>
                     </thead>
                     <tbody>
-                      {docs.map((doc) => (
-                        <tr key={doc.id} className="rounded-[14px] bg-[#fff8f3] align-top">
-                          <td className="max-w-[240px] rounded-l-[14px] px-3 py-3 font-semibold text-[#35152f]">
-                            <span className="block truncate" title={doc.title}>{doc.title}</span>
-                            <span className="mt-1 block text-xs font-normal text-muted-foreground">{doc.id.slice(0, 8)}</span>
-                          </td>
-                          <td className="px-3 py-3">
-                            <Badge className={doc.status === "processed" ? "border-[#d7bb5f] text-[#795b13]" : "text-destructive"}>
-                              {doc.status}
-                            </Badge>
-                          </td>
-                          <td className="px-3 py-3 text-muted-foreground">{formatDate(doc.created_at)}</td>
-                          <td className="rounded-r-[14px] px-3 py-3 text-muted-foreground">
-                            <p className="line-clamp-2 max-w-xl leading-6">{doc.summary ?? "Ainda sem resumo auditado."}</p>
-                          </td>
-                        </tr>
-                      ))}
+                      {docs.map((doc) => {
+                        const isOpen = opened[doc.id] ?? false;
+                        const isMaximized = maximized[doc.id] ?? false;
+
+                        return (
+                          <Fragment key={doc.id}>
+                            <tr className="rounded-[14px] bg-[#fff8f3] align-top">
+                              <td className="max-w-[240px] rounded-l-[14px] px-3 py-3 font-semibold text-[#35152f]">
+                                <button
+                                  type="button"
+                                  className="block max-w-full truncate text-left underline-offset-4 hover:underline"
+                                  title={doc.title}
+                                  onClick={() => setOpened((current) => ({ ...current, [doc.id]: !isOpen }))}
+                                >
+                                  {doc.title}
+                                </button>
+                                <span className="mt-1 block text-xs font-normal text-muted-foreground">{doc.id.slice(0, 8)}</span>
+                              </td>
+                              <td className="px-3 py-3">
+                                <Badge className={doc.status === "processed" ? "border-[#d7bb5f] text-[#795b13]" : "text-destructive"}>
+                                  {doc.status}
+                                </Badge>
+                              </td>
+                              <td className="px-3 py-3 text-muted-foreground">{formatDate(doc.created_at)}</td>
+                              <td className="rounded-r-[14px] px-3 py-3 text-muted-foreground">
+                                <button
+                                  type="button"
+                                  className="line-clamp-2 max-w-xl text-left leading-6 underline-offset-4 hover:underline"
+                                  onClick={() => setOpened((current) => ({ ...current, [doc.id]: !isOpen }))}
+                                >
+                                  {doc.summary ?? "Ainda sem resumo auditado."}
+                                </button>
+                              </td>
+                            </tr>
+                            {isOpen ? (
+                              <tr>
+                                <td colSpan={4} className="rounded-[14px] bg-white px-3 py-3">
+                                  <div className="rounded-[14px] border border-[#ead8da] bg-[#fff8f3] p-4">
+                                    <div className="flex flex-wrap items-start justify-between gap-3">
+                                      <div>
+                                        <h4 className="font-semibold text-[#35152f]">Conteudo completo extraido</h4>
+                                        <p className="mt-1 text-xs text-muted-foreground">
+                                          {doc.title} - {doc.chunks.length} chunk{doc.chunks.length === 1 ? "" : "s"}
+                                        </p>
+                                      </div>
+                                      <div className="flex flex-wrap gap-2">
+                                        <Button
+                                          type="button"
+                                          variant="outline"
+                                          size="sm"
+                                          onClick={() => setOpened((current) => ({ ...current, [doc.id]: false }))}
+                                        >
+                                          <ChevronUp className="h-4 w-4" />
+                                          Minimizar
+                                        </Button>
+                                        <Button
+                                          type="button"
+                                          variant="outline"
+                                          size="sm"
+                                          onClick={() => setMaximized((current) => ({ ...current, [doc.id]: !isMaximized }))}
+                                        >
+                                          {isMaximized ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+                                          {isMaximized ? "Compactar" : "Maximizar"}
+                                        </Button>
+                                      </div>
+                                    </div>
+                                    <div
+                                      className={[
+                                        "mt-4 overflow-y-auto rounded-[12px] bg-white/80 p-4 pr-3 text-sm leading-7 text-muted-foreground",
+                                        isMaximized ? "max-h-[34rem]" : "max-h-56",
+                                      ].join(" ")}
+                                    >
+                                      <p className="whitespace-pre-wrap">{getDocumentContent(doc)}</p>
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                            ) : null}
+                          </Fragment>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
