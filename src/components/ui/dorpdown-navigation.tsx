@@ -68,9 +68,9 @@ export function DropdownNavigation({ navItems }: { navItems: DropdownNavItem[] }
 
               <AnimatePresence>
                 {openMenu === navItem.label && navItem.subMenus && (
-                  <div className="absolute left-0 top-full pt-2">
+                  <div className="fixed inset-x-3 top-[112px] z-50 pt-0 sm:top-[118px] lg:absolute lg:left-0 lg:right-auto lg:top-full lg:pt-2">
                     <motion.div
-                      className="w-[min(88vw,820px)] rounded-[16px] border border-border bg-background p-4 shadow-[0_24px_70px_rgba(20,53,47,0.18)]"
+                      className="max-h-[68vh] w-full overflow-y-auto rounded-[16px] border border-border bg-background p-4 shadow-[0_24px_70px_rgba(20,53,47,0.22)] lg:w-[min(88vw,820px)]"
                       layoutId="menu"
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -85,7 +85,11 @@ export function DropdownNavigation({ navItems }: { navItems: DropdownNavItem[] }
                                 const Icon = item.icon;
                                 return (
                                   <li key={item.label}>
-                                    <a href={item.href} className="group flex items-start space-x-3 rounded-[14px] p-2 transition hover:bg-secondary">
+                                    <a
+                                      href={item.href}
+                                      className="group flex items-start space-x-3 rounded-[14px] p-2 transition hover:bg-secondary"
+                                      onClick={() => setOpenMenu(null)}
+                                    >
                                       <div className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border text-foreground transition-colors duration-300 group-hover:bg-accent group-hover:text-accent-foreground">
                                         <Icon className="h-5 w-5 flex-none" />
                                       </div>
