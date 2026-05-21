@@ -4,7 +4,7 @@ import { UploadPanel } from "@/components/library/upload-panel";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requirePremium } from "@/lib/auth/guards";
-import { getServerSupabase } from "@/lib/supabase/server";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { formatDate } from "@/lib/utils";
 import type { DocumentRecord } from "@/types/database";
 
@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 
 export default async function LibraryPage() {
   const context = await requirePremium();
-  const supabase = await getServerSupabase();
+  const supabase = getSupabaseAdmin();
   const { data, error } = await supabase
     .from("documents")
     .select("*")
