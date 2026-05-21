@@ -59,7 +59,7 @@ export default async function DashboardPage() {
           <CardContent className="space-y-3">
             {activities.data?.map((activity) => (
               <div key={activity.id} className="rounded-[14px] border bg-white p-3 text-sm">
-                <p className="font-semibold text-[#35152f]">{activity.action}</p>
+                <p className="font-semibold text-[#183c35]">{activity.action}</p>
                 <p className="text-xs text-muted-foreground">{new Date(activity.created_at).toLocaleString("pt-BR")}</p>
               </div>
             ))}
@@ -70,3 +70,4 @@ export default async function DashboardPage() {
     </AppShell>
   );
 }
+

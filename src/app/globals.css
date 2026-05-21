@@ -1,22 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fff8f3;
-  --foreground: #221320;
+  --background: #f3fbf6;
+  --foreground: #142d29;
   --card: #ffffff;
-  --card-foreground: #221320;
-  --primary: #8f2f52;
-  --primary-foreground: #fff8f3;
-  --secondary: #f4d9df;
-  --secondary-foreground: #4b1730;
-  --muted: #f7ece9;
-  --muted-foreground: #765a68;
+  --card-foreground: #142d29;
+  --primary: #2f7d68;
+  --primary-foreground: #f8fff9;
+  --secondary: #d9ebe2;
+  --secondary-foreground: #183c35;
+  --muted: #eaf5ef;
+  --muted-foreground: #59736b;
   --accent: #c7a64b;
-  --accent-foreground: #1d1220;
+  --accent-foreground: #142d29;
   --destructive: #b42335;
-  --border: #ead8da;
-  --input: #ead8da;
-  --ring: #b95d7c;
+  --border: #cfe2d8;
+  --input: #cfe2d8;
+  --ring: #6aa892;
   --radius: 18px;
 }
 
@@ -54,8 +54,8 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at top left, rgba(199, 166, 75, 0.22), transparent 30rem),
-    linear-gradient(135deg, #fff8f3 0%, #f8edf3 45%, #eff0ff 100%);
+    radial-gradient(circle at top left, rgba(199, 166, 75, 0.18), transparent 30rem),
+    linear-gradient(135deg, #f3fbf6 0%, #e8f5ee 48%, #eef4ff 100%);
   color: var(--foreground);
   font-family: "Inter", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
 }

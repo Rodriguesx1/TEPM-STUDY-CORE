@@ -51,7 +51,7 @@ export function LicenseManager({ profiles, licenses }: { profiles: AdminProfile[
     <div className="grid gap-5 xl:grid-cols-[0.9fr_1.1fr]">
       <form onSubmit={submit} className="space-y-4 rounded-[18px] border bg-white p-5">
         <div>
-          <label className="text-sm font-semibold text-[#35152f]">Usuario</label>
+          <label className="text-sm font-semibold text-[#183c35]">Usuario</label>
           <select className="mt-2 h-11 w-full rounded-[14px] border border-input bg-white px-3 text-sm" value={userId} onChange={(event) => setUserId(event.target.value)} required>
             {profiles.map((profile) => (
               <option key={profile.id} value={profile.id}>
@@ -61,7 +61,7 @@ export function LicenseManager({ profiles, licenses }: { profiles: AdminProfile[
           </select>
         </div>
         <div>
-          <label className="text-sm font-semibold text-[#35152f]">Status</label>
+          <label className="text-sm font-semibold text-[#183c35]">Status</label>
           <select className="mt-2 h-11 w-full rounded-[14px] border border-input bg-white px-3 text-sm" value={status} onChange={(event) => setStatus(event.target.value as LicenseStatus)}>
             <option value="trial">Trial</option>
             <option value="active">Premium ativo</option>
@@ -83,7 +83,7 @@ export function LicenseManager({ profiles, licenses }: { profiles: AdminProfile[
             <article key={profile.id} className="rounded-[16px] border bg-white p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <h3 className="font-semibold text-[#35152f]">{profile.email}</h3>
+                  <h3 className="font-semibold text-[#183c35]">{profile.email}</h3>
                   <p className="text-sm text-muted-foreground">{profile.role === "admin" ? "Admin ilimitado" : "Usuario comum"}</p>
                 </div>
                 <span className="rounded-full bg-[#f4d9df] px-3 py-1 text-xs font-semibold text-[#67213d]">
@@ -98,3 +98,4 @@ export function LicenseManager({ profiles, licenses }: { profiles: AdminProfile[
     </div>
   );
 }
+

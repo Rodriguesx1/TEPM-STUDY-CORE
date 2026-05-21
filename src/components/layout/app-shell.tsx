@@ -16,7 +16,7 @@ const nav = [
 export function AppShell({ children, context }: { children: React.ReactNode; context: SessionContext }) {
   return (
     <div className="min-h-dvh">
-      <aside className="fixed inset-y-0 left-0 z-20 hidden w-72 border-r border-white/60 bg-[#211326]/95 p-5 text-white lg:block">
+      <aside className="fixed inset-y-0 left-0 z-20 hidden w-72 border-r border-white/60 bg-[#14352f]/95 p-5 text-white lg:block">
         <Link href="/dashboard" className="block">
           <p className="font-serif text-2xl font-bold">TEPM Study Core</p>
           <p className="mt-1 text-xs uppercase tracking-[0.24em] text-[#e2c875]">Therapeutic AI</p>
@@ -47,7 +47,7 @@ export function AppShell({ children, context }: { children: React.ReactNode; con
         <header className="sticky top-0 z-10 border-b border-white/60 bg-white/76 px-4 py-3 backdrop-blur md:px-8">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="font-serif text-xl font-bold text-[#3a1a31]">Centro de estudos terapêuticos</p>
+              <p className="font-serif text-xl font-bold text-[#183c35]">Centro de estudos terapêuticos</p>
               <p className="text-sm text-muted-foreground">{context.email}</p>
             </div>
             <div className="flex items-center gap-2">
@@ -74,3 +74,4 @@ export function AppShell({ children, context }: { children: React.ReactNode; con
     </div>
   );
 }
+

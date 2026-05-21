@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, ChevronUp, Maximize2, Minimize2 } from "lucide-react";
+import { ChevronDown, ChevronUp, FileText, Maximize2, Minimize2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,7 +49,7 @@ export function DocumentLibraryPanel({ documents, error }: { documents: Document
           <article className="rounded-[16px] border bg-white p-4">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="min-w-0 flex-1">
-                <h3 className="font-semibold leading-6 text-[#35152f]">Conteudo do PDF selecionado</h3>
+                <h3 className="font-semibold leading-6 text-[#183c35]">Conteudo do PDF selecionado</h3>
                 <p className="mt-1 text-sm text-muted-foreground">Os PDFs abaixo trocam o texto dentro deste mesmo card.</p>
               </div>
               <div className="flex shrink-0 flex-wrap gap-2">
@@ -64,30 +64,30 @@ export function DocumentLibraryPanel({ documents, error }: { documents: Document
               </div>
             </div>
 
-            <div className="mt-4 flex flex-wrap gap-2">
-              {documents.map((doc) => {
-                const selected = doc.id === selectedDocument?.id;
-
-                return (
-                  <Button
-                    key={doc.id}
-                    type="button"
-                    size="sm"
-                    variant={selected ? "primary" : "outline"}
-                    className="h-auto max-w-full justify-start whitespace-normal px-3 py-2 text-left text-xs"
-                    onClick={() => setSelectedDocumentId(doc.id)}
-                  >
+            <div className="mt-4 rounded-[14px] border border-border bg-[#eef8f2] p-3">
+              <label htmlFor="active-document" className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                <FileText className="h-4 w-4 text-primary" />
+                PDF ativo para leitura
+              </label>
+              <select
+                id="active-document"
+                value={selectedDocument?.id ?? ""}
+                onChange={(event) => setSelectedDocumentId(event.target.value)}
+                className="h-11 w-full rounded-[14px] border border-input bg-white/90 px-3 text-sm font-semibold text-[#183c35] outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/25"
+              >
+                {documents.map((doc) => (
+                  <option key={doc.id} value={doc.id}>
                     {doc.title}
-                  </Button>
-                );
-              })}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {selectedDocument ? (
-              <div className="mt-4 rounded-[14px] border border-[#ead8da] bg-[#fff8f3] p-4">
+              <div className="mt-4 rounded-[14px] border border-border bg-[#eef8f2] p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <h4 className="break-words font-semibold leading-6 text-[#35152f]">{selectedDocument.title}</h4>
+                    <h4 className="break-words font-semibold leading-6 text-[#183c35]">{selectedDocument.title}</h4>
                     <p className="mt-1 text-xs text-muted-foreground">{formatDate(selectedDocument.created_at)}</p>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -117,3 +117,4 @@ export function DocumentLibraryPanel({ documents, error }: { documents: Document
     </Card>
   );
 }
+

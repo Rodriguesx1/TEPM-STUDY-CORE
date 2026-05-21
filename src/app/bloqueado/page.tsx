@@ -12,7 +12,7 @@ export default async function BlockedPage() {
     <AppShell context={context}>
       <Card className="mx-auto max-w-2xl border-[#d7bb5f]/50 bg-white">
         <CardHeader>
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[16px] bg-[#211326] text-[#e2c875]">
+          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[16px] bg-[#14352f] text-[#e2c875]">
             <LockKeyhole className="h-5 w-5" />
           </div>
           <CardTitle>Acesso premium bloqueado</CardTitle>
@@ -33,3 +33,4 @@ export default async function BlockedPage() {
     </AppShell>
   );
 }
+

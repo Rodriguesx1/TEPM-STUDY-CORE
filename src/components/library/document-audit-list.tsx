@@ -32,7 +32,7 @@ export function DocumentAuditList({ documents }: { documents: DocumentWithChunks
         <div>
           <div className="flex items-center gap-2">
             <FileCheck2 className="h-5 w-5 text-primary" />
-            <h2 className="text-lg font-bold text-[#35152f]">Controle de conteudo processado</h2>
+            <h2 className="text-lg font-bold text-[#183c35]">Controle de conteudo processado</h2>
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
             PDFs auditados e organizados por categoria mediante o conteudo extraido.
@@ -54,7 +54,7 @@ export function DocumentAuditList({ documents }: { documents: DocumentWithChunks
             Object.entries(grouped).map(([category, docs]) => (
               <div key={category} className="space-y-2">
                 <div className="flex items-center justify-between gap-3">
-                  <h3 className="font-serif text-xl font-bold text-[#35152f]">{category}</h3>
+                  <h3 className="font-serif text-xl font-bold text-[#183c35]">{category}</h3>
                   <Badge>{docs.length} PDF{docs.length === 1 ? "" : "s"}</Badge>
                 </div>
                 <div className="overflow-x-auto">
@@ -74,8 +74,8 @@ export function DocumentAuditList({ documents }: { documents: DocumentWithChunks
 
                         return (
                           <Fragment key={doc.id}>
-                            <tr className="rounded-[14px] bg-[#fff8f3] align-top">
-                              <td className="max-w-[240px] rounded-l-[14px] px-3 py-3 font-semibold text-[#35152f]">
+                            <tr className="rounded-[14px] bg-[#eef8f2] align-top">
+                              <td className="max-w-[240px] rounded-l-[14px] px-3 py-3 font-semibold text-[#183c35]">
                                 <button
                                   type="button"
                                   className="block max-w-full truncate text-left underline-offset-4 hover:underline"
@@ -105,10 +105,10 @@ export function DocumentAuditList({ documents }: { documents: DocumentWithChunks
                             {isOpen ? (
                               <tr>
                                 <td colSpan={4} className="rounded-[14px] bg-white px-3 py-3">
-                                  <div className="rounded-[14px] border border-[#ead8da] bg-[#fff8f3] p-4">
+                                  <div className="rounded-[14px] border border-border bg-[#eef8f2] p-4">
                                     <div className="flex flex-wrap items-start justify-between gap-3">
                                       <div>
-                                        <h4 className="font-semibold text-[#35152f]">Conteudo completo extraido</h4>
+                                        <h4 className="font-semibold text-[#183c35]">Conteudo completo extraido</h4>
                                         <p className="mt-1 text-xs text-muted-foreground">
                                           {doc.title} - {doc.chunks.length} chunk{doc.chunks.length === 1 ? "" : "s"}
                                         </p>

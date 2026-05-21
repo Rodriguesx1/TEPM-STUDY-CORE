@@ -43,7 +43,7 @@ export function ChatPanel() {
             {loading ? "Consultando..." : "Perguntar"}
           </Button>
         </form>
-        {answer ? <div className="mt-5 rounded-[18px] bg-[#211326] p-5 text-sm leading-7 text-white">{answer}</div> : null}
+        {answer ? <div className="mt-5 rounded-[18px] bg-[#14352f] p-5 text-sm leading-7 text-white">{answer}</div> : null}
       </CardContent>
     </Card>
   );

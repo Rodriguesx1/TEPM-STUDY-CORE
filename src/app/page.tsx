@@ -49,8 +49,8 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-          <div className="rounded-[28px] border border-white/70 bg-[#211326] p-5 shadow-2xl shadow-[#6f3150]/20">
-            <div className="rounded-[22px] bg-[#fff8f3] p-5">
+          <div className="rounded-[28px] border border-white/70 bg-[#14352f] p-5 shadow-2xl shadow-[#2f7d68]/20">
+            <div className="rounded-[22px] bg-[#f3fbf6] p-5">
               <div className="grid gap-4">
                 {features.map((feature) => (
                   <Card key={feature.title} className="bg-white">
@@ -71,3 +71,4 @@ export default function HomePage() {
     </main>
   );
 }
+
