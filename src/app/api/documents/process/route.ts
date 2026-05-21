@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { generateEmbedding } from "@/lib/ai/providers";
 import { chunkText, summarizeLocally } from "@/lib/documents/chunking";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { getEnv } from "@/lib/utils";
 
@@ -9,6 +10,7 @@ export async function POST(request: Request) {
     const supabase = await getServerSupabase();
     const { data: auth } = await supabase.auth.getUser();
     if (!auth.user) return NextResponse.json({ error: "Login obrigatorio." }, { status: 401 });
+    const admin = getSupabaseAdmin();
 
     const { filePath, title, mimeType, size } = (await request.json()) as {
       filePath?: string;
@@ -20,13 +22,13 @@ export async function POST(request: Request) {
     if (!filePath.startsWith(`${auth.user.id}/`)) return NextResponse.json({ error: "Arquivo nao pertence ao usuario autenticado." }, { status: 403 });
     if (mimeType && mimeType !== "application/pdf") return NextResponse.json({ error: "Somente PDF e aceito nesta rota." }, { status: 400 });
 
-    const profileResult = await supabase.from("profiles").select("role").eq("id", auth.user.id).maybeSingle();
+    const profileResult = await admin.from("profiles").select("role").eq("id", auth.user.id).maybeSingle();
     const { data: profile } = profileResult.data
       ? profileResult
-      : await supabase.from("users_profiles").select("role").eq("id", auth.user.id).maybeSingle();
+      : await admin.from("users_profiles").select("role").eq("id", auth.user.id).maybeSingle();
     const isAdmin = profile?.role === "admin";
     if (!isAdmin) {
-      const { data: license } = await supabase
+      const { data: license } = await admin
         .from("licenses")
         .select("id")
         .eq("user_id", auth.user.id)
@@ -41,14 +43,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: `Arquivo excede o limite de ${maxMb}MB.` }, { status: 413 });
     }
 
-    const created = await supabase
+    const created = await admin
       .from("documents")
       .insert({ user_id: auth.user.id, title, file_path: filePath, mime_type: mimeType ?? "application/pdf", status: "processing" })
       .select("id")
       .single();
     if (created.error) throw created.error;
 
-    const download = await supabase.storage.from("study-documents").download(filePath);
+    const download = await admin.storage.from("study-documents").download(filePath);
     if (download.error) throw download.error;
 
     const bytes = await download.data.arrayBuffer();
@@ -60,7 +62,7 @@ export async function POST(request: Request) {
 
     for (const [index, content] of chunks.entries()) {
       const embedding = await generateEmbedding(content);
-      const insert = await supabase.from("document_chunks").insert({
+      const insert = await admin.from("document_chunks").insert({
         user_id: auth.user.id,
         document_id: created.data.id,
         chunk_index: index,
@@ -71,12 +73,12 @@ export async function POST(request: Request) {
       if (insert.error) throw insert.error;
     }
 
-    await supabase
+    await admin
       .from("documents")
       .update({ status: "processed", summary, theme: "PDF terapeutico" })
       .eq("id", created.data.id)
       .eq("user_id", auth.user.id);
-    await supabase.from("audit_logs").insert({ user_id: auth.user.id, action: "document.processed", entity_type: "documents", entity_id: created.data.id });
+    await admin.from("audit_logs").insert({ user_id: auth.user.id, action: "document.processed", entity_type: "documents", entity_id: created.data.id });
 
     return NextResponse.json({ message: `PDF processado com ${chunks.length} chunks.`, documentId: created.data.id });
   } catch (error) {
