@@ -157,3 +157,74 @@ export type RoomMessage = {
   body: string;
   created_at: string;
 };
+
+export type StudyEvent = {
+  id: string;
+  user_id: string;
+  title: string;
+  description: string | null;
+  event_type: "study" | "review" | "weekly_goal" | "therapy_session" | "license_alert";
+  starts_at: string;
+  ends_at: string | null;
+  status: "scheduled" | "completed" | "cancelled";
+  metadata: Record<string, unknown>;
+  created_at: string;
+  updated_at?: string;
+};
+
+export type StudyTask = {
+  id: string;
+  user_id: string;
+  event_id: string | null;
+  document_id: string | null;
+  video_id: string | null;
+  title: string;
+  description: string | null;
+  task_type: "study" | "review" | "goal" | "therapy_session" | "automation";
+  priority: "low" | "medium" | "high";
+  due_at: string | null;
+  status: "pending" | "completed" | "cancelled";
+  completed_at: string | null;
+  points_awarded: number;
+  metadata: Record<string, unknown>;
+  created_at: string;
+  updated_at?: string;
+};
+
+export type StudyGoal = {
+  id: string;
+  user_id: string;
+  title: string;
+  description: string | null;
+  target_count: number;
+  current_count: number;
+  period_start: string;
+  period_end: string;
+  status: "active" | "completed" | "paused" | "cancelled";
+  metadata: Record<string, unknown>;
+  created_at: string;
+  updated_at?: string;
+};
+
+export type UserPoints = {
+  user_id: string;
+  total_points: number;
+  level: number;
+  updated_at: string;
+};
+
+export type BillingPlan = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  price_cents: number;
+  currency: string;
+  interval: "free" | "month" | "year" | "lifetime";
+  features: string[];
+  limits: Record<string, number>;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at?: string;
+};

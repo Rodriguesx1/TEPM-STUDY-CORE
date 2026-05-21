@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, Brain, FileText, LayoutDashboard, MessageCircle, Presentation, Shield, Users, Video } from "lucide-react";
+import { BarChart3, BookOpen, Brain, CalendarDays, CreditCard, FileText, LayoutDashboard, MessageCircle, Presentation, Shield, ShieldCheck, Users, Video } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { SessionContext } from "@/lib/auth/guards";
@@ -10,6 +10,9 @@ const nav = [
   { href: "/dashboard/videos", label: "Videos", icon: Video },
   { href: "/chat", label: "Mentora IA", icon: Brain },
   { href: "/trilhas", label: "Trilhas", icon: BookOpen },
+  { href: "/dashboard/calendar", label: "Calendario", icon: CalendarDays },
+  { href: "/dashboard/reports", label: "Relatorios", icon: BarChart3 },
+  { href: "/dashboard/privacy", label: "Privacidade", icon: ShieldCheck },
   { href: "/dashboard/slides", label: "Slides", icon: Presentation },
   { href: "/caderno", label: "Caderno", icon: MessageCircle },
   { href: "/comunidade", label: "Comunidade", icon: Users },
@@ -35,13 +38,22 @@ export function AppShell({ children, context }: { children: React.ReactNode; con
             </Link>
           ))}
           {context.isAdmin ? (
-            <Link
-              href="/admin"
-              className="flex items-center gap-3 rounded-[14px] px-3 py-3 text-sm font-medium text-white/78 transition hover:bg-white/10 hover:text-white"
-            >
-              <Shield className="h-4 w-4 text-[#e2c875]" />
-              Admin Master
-            </Link>
+            <>
+              <Link
+                href="/admin"
+                className="flex items-center gap-3 rounded-[14px] px-3 py-3 text-sm font-medium text-white/78 transition hover:bg-white/10 hover:text-white"
+              >
+                <Shield className="h-4 w-4 text-[#e2c875]" />
+                Admin Master
+              </Link>
+              <Link
+                href="/admin/billing"
+                className="flex items-center gap-3 rounded-[14px] px-3 py-3 text-sm font-medium text-white/78 transition hover:bg-white/10 hover:text-white"
+              >
+                <CreditCard className="h-4 w-4 text-[#e2c875]" />
+                Financeiro
+              </Link>
+            </>
           ) : null}
         </nav>
       </aside>

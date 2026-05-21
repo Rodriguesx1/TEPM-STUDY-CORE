@@ -1,4 +1,5 @@
 import { LicenseManager } from "@/components/admin/license-manager";
+import { MetricsPanel } from "@/components/admin/metrics-panel";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,6 +39,15 @@ export default async function AdminPage() {
             <p className="text-sm text-muted-foreground">
               Operacoes sensiveis rodam no servidor com service role e politicas RLS. Este painel nao expoe chaves administrativas ao navegador.
             </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Observabilidade de producao</CardTitle>
+            <CardDescription>Metricas globais de usuarios, IA, uploads, storage, leads e erros.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <MetricsPanel />
           </CardContent>
         </Card>
         <Card>

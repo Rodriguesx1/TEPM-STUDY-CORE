@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
+import { buildAiCacheKey, getCachedAiAnswer, storeCachedAiAnswer } from "@/lib/ai/cache";
 import { answerWithFallback } from "@/lib/ai/providers";
 import { retrieveRelevantContext } from "@/lib/ai/rag";
+import { estimateTokens, logSystemEvent } from "@/lib/observability/logger";
+import { checkRateLimit, ipKey } from "@/lib/security/rate-limit";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { getServerSupabase } from "@/lib/supabase/server";
 
@@ -42,14 +45,31 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const startedAt = Date.now();
+  let logUserId: string | null = null;
   try {
     const supabase = await getServerSupabase();
     const admin = getSupabaseAdmin();
     const { data: auth } = await supabase.auth.getUser();
     if (!auth.user) return NextResponse.json({ error: "Login obrigatorio." }, { status: 401 });
+    logUserId = auth.user.id;
 
     const { question, chatId } = (await request.json()) as { question?: string; chatId?: string };
     if (!question?.trim()) return NextResponse.json({ error: "Pergunta obrigatoria." }, { status: 400 });
+    if (question.length > 4000) return NextResponse.json({ error: "Pergunta excede o limite de 4000 caracteres." }, { status: 413 });
+
+    const rate = await checkRateLimit({
+      admin,
+      userId: auth.user.id,
+      route: "/api/chat",
+      key: ipKey(request, auth.user.id),
+      maxRequests: 30,
+      windowSeconds: 3600,
+    });
+    if (!rate.allowed) {
+      await logSystemEvent(admin, { userId: auth.user.id, level: "warn", event: "rate_limit.blocked", source: "security", route: "/api/chat", metadata: { current_count: rate.currentCount, reset_at: rate.resetAt } });
+      return NextResponse.json({ error: "Limite de perguntas por hora atingido. Tente novamente mais tarde.", resetAt: rate.resetAt }, { status: 429 });
+    }
 
     const profileResult = await supabase
       .from("profiles")
@@ -83,6 +103,8 @@ export async function POST(request: Request) {
       limit: 10,
     });
     const hasContext = Boolean(context.trim());
+    const cacheKey = buildAiCacheKey(auth.user.id, question, sources);
+    const cached = hasContext ? await getCachedAiAnswer(admin, auth.user.id, cacheKey) : null;
     const prompt = [
       "Voce e a Mentora IA do TEPM Study Core.",
       "Responda em portugues, com cuidado terapeutico, sem prometer diagnostico medico.",
@@ -119,13 +141,19 @@ export async function POST(request: Request) {
     });
     if (userMessage.error) throw userMessage.error;
 
-    const result = hasContext
+    const result = cached
+      ? { provider: `${cached.provider}:cache`, answer: cached.answer }
+      : hasContext
       ? await answerWithFallback(prompt)
       : {
           provider: "system",
           answer:
             "Ainda nao encontrei conteudo processado nos seus PDFs para responder com base nos materiais. Envie e processe um PDF na Biblioteca antes de usar o modo RAG.",
         };
+
+    if (hasContext && !cached) {
+      await storeCachedAiAnswer(admin, { userId: auth.user.id, cacheKey, provider: result.provider, prompt, answer: result.answer, sources });
+    }
 
     const assistantMessage = await admin.from("ai_messages").insert({
       chat_id: activeChatId,
@@ -141,8 +169,32 @@ export async function POST(request: Request) {
       action: isAdmin ? `chat.${result.provider}.admin_unlimited` : `chat.${result.provider}`,
       entity_type: "ai",
     });
+    await logSystemEvent(admin, {
+      userId: auth.user.id,
+      level: "info",
+      event: "ai.chat.completed",
+      source: "ai",
+      route: "/api/chat",
+      durationMs: Date.now() - startedAt,
+      metadata: {
+        provider: result.provider,
+        cached: Boolean(cached),
+        used_semantic_search: usedSemanticSearch,
+        source_count: sources.length,
+        token_estimate: estimateTokens(prompt) + estimateTokens(result.answer),
+      },
+    });
     return NextResponse.json({ answer: result.answer, provider: result.provider, chatId: activeChatId, sources, usedSemanticSearch });
   } catch (error) {
+    await logSystemEvent(getSupabaseAdmin(), {
+      userId: logUserId,
+      level: "error",
+      event: "ai.chat.failed",
+      source: "ai",
+      route: "/api/chat",
+      durationMs: Date.now() - startedAt,
+      metadata: { message: error instanceof Error ? error.message : "Falha no chat IA." },
+    });
     return NextResponse.json({ error: error instanceof Error ? error.message : "Falha no chat IA." }, { status: 500 });
   }
 }

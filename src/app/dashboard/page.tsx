@@ -58,6 +58,31 @@ export default async function DashboardPage() {
             <Link href="/dashboard/community">
               <Button variant="outline">Comunidade</Button>
             </Link>
+            <Link href="/dashboard/calendar">
+              <Button variant="outline">Calendario</Button>
+            </Link>
+            <Link href="/dashboard/reports">
+              <Button variant="outline">Relatorios</Button>
+            </Link>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Ativacao inicial</CardTitle>
+            <CardDescription>Checklist de retencao para transformar materiais em rotina de estudo.</CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            {[
+              { label: "Enviar primeiro PDF", done: Boolean(documents.count) },
+              { label: "Criar uma anotacao", done: Boolean(notes.count) },
+              { label: "Gerar trilha", done: Boolean(paths.count) },
+              { label: "Abrir calendario", done: false },
+            ].map((item) => (
+              <div key={item.label} className="rounded-[16px] border bg-white p-3 text-sm">
+                <p className="font-semibold text-[#183c35]">{item.label}</p>
+                <p className={item.done ? "text-[#2f7d69]" : "text-muted-foreground"}>{item.done ? "Concluido" : "Pendente"}</p>
+              </div>
+            ))}
           </CardContent>
         </Card>
         <Card>

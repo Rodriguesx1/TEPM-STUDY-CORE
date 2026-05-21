@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { classifyDocumentCategory, generateEmbedding } from "@/lib/ai/providers";
 import { chunkText, summarizeLocally } from "@/lib/documents/chunking";
+import { logSystemEvent } from "@/lib/observability/logger";
+import { checkRateLimit, ipKey } from "@/lib/security/rate-limit";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { getEnv } from "@/lib/utils";
 
 export async function POST(request: Request) {
+  const startedAt = Date.now();
   let createdDocumentId: string | null = null;
   let authenticatedUserId: string | null = null;
   try {
@@ -14,6 +17,15 @@ export async function POST(request: Request) {
     if (!auth.user) return NextResponse.json({ error: "Login obrigatorio." }, { status: 401 });
     authenticatedUserId = auth.user.id;
     const admin = getSupabaseAdmin();
+    const rate = await checkRateLimit({
+      admin,
+      userId: auth.user.id,
+      route: "/api/documents/process",
+      key: ipKey(request, auth.user.id),
+      maxRequests: 20,
+      windowSeconds: 3600,
+    });
+    if (!rate.allowed) return NextResponse.json({ error: "Limite de processamento por hora atingido." }, { status: 429 });
 
     const { filePath, title, mimeType, size } = (await request.json()) as {
       filePath?: string;
@@ -112,6 +124,14 @@ export async function POST(request: Request) {
       .eq("id", created.data.id)
       .eq("user_id", auth.user.id);
     await admin.from("audit_logs").insert({ user_id: auth.user.id, action: "document.processed", entity_type: "documents", entity_id: created.data.id });
+    await logSystemEvent(admin, {
+      userId: auth.user.id,
+      event: "document.processed",
+      source: "upload",
+      route: "/api/documents/process",
+      durationMs: Date.now() - startedAt,
+      metadata: { document_id: created.data.id, chunks: chunks.length, category, file_size: size ?? null },
+    });
 
     return NextResponse.json({ message: `PDF processado com ${chunks.length} chunks na categoria ${category}.`, documentId: created.data.id, category });
   } catch (error) {
@@ -131,6 +151,15 @@ export async function POST(request: Request) {
         action: "document.process_failed",
         entity_type: "documents",
         entity_id: createdDocumentId,
+      });
+      await logSystemEvent(admin, {
+        userId: authenticatedUserId,
+        level: "error",
+        event: "document.process_failed",
+        source: "upload",
+        route: "/api/documents/process",
+        durationMs: Date.now() - startedAt,
+        metadata: { document_id: createdDocumentId, message: error instanceof Error ? error.message : "Falha ao processar documento." },
       });
     }
     return NextResponse.json({ error: error instanceof Error ? error.message : "Falha ao processar documento." }, { status: 500 });

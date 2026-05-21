@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Brain, FileText, Lock, Users } from "lucide-react";
+import { LeadCaptureForm } from "@/components/growth/lead-capture-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -25,8 +26,19 @@ const plans = [
 ];
 
 export default function HomePage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "TEPM Study Core",
+    applicationCategory: "EducationalApplication",
+    operatingSystem: "Web",
+    description: "Plataforma privada de estudos terapeuticos com IA, memoria inteligente, trilhas, revisoes e mentora RAG.",
+    offers: plans.map((plan) => ({ "@type": "Offer", name: plan.name, description: plan.description })),
+  };
+
   return (
     <main className="min-h-screen overflow-hidden">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <section className="relative px-5 py-8 md:px-10 lg:px-16">
         <nav className="mx-auto flex max-w-7xl items-center justify-between">
           <div>
@@ -45,6 +57,7 @@ export default function HomePage() {
               Transforme PDFs terapeuticos em resumos, memoria inteligente, trilhas de estudo e respostas com fontes.
               Menos busca manual, mais clareza para estudar, revisar e aplicar.
             </p>
+            <LeadCaptureForm />
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link href="/login">
                 <Button size="lg">
