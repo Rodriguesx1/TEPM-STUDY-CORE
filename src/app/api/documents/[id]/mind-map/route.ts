@@ -44,17 +44,25 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
       parsed = { title: document.data.title, markdown: result.answer, raw: result.answer };
     }
 
-    const created = await admin
+    const payload = {
+      user_id: auth.user.id,
+      document_id: id,
+      title: String(parsed.title ?? `Mapa mental - ${document.data.title}`),
+      map_json: parsed,
+      markdown: String(parsed.markdown ?? result.answer),
+    };
+
+    let created = await admin
       .from("mind_maps")
-      .insert({
-        user_id: auth.user.id,
-        document_id: id,
-        title: String(parsed.title ?? `Mapa mental - ${document.data.title}`),
-        map_json: parsed,
-        markdown: String(parsed.markdown ?? result.answer),
-      })
+      .insert(payload)
       .select("*")
       .single();
+
+    if (created.error && created.error.message.toLowerCase().includes("document_id")) {
+      const { document_id: _documentId, ...fallbackPayload } = payload;
+      created = await admin.from("mind_maps").insert(fallbackPayload).select("*").single();
+    }
+
     if (created.error) throw created.error;
 
     await admin.from("audit_logs").insert({ user_id: auth.user.id, action: `mind_map.${result.provider}`, entity_type: "mind_maps", entity_id: created.data.id });

@@ -1,7 +1,7 @@
 export type MindMapRecord = {
   id: string;
   user_id: string;
-  document_id: string | null;
+  document_id?: string | null;
   title: string;
   map_json: unknown;
   markdown: string | null;

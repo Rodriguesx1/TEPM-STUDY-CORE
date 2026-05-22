@@ -10,7 +10,7 @@ export default async function MindMapsPage({ searchParams }: { searchParams: Pro
 
   const { data, error } = await supabase
     .from("mind_maps")
-    .select("id,user_id,document_id,title,map_json,markdown,created_at")
+    .select("id,user_id,title,map_json,markdown,created_at")
     .eq("user_id", context.userId)
     .order("created_at", { ascending: false });
 
@@ -22,26 +22,7 @@ export default async function MindMapsPage({ searchParams }: { searchParams: Pro
     );
   }
 
-  const baseMaps = (data ?? []) as MindMapRecord[];
-  const documentIds = Array.from(new Set(baseMaps.map((item) => item.document_id).filter(Boolean))) as string[];
-  const documentsById = new Map<string, { title: string | null; theme: string | null }>();
-
-  if (documentIds.length) {
-    const { data: documents } = await supabase
-      .from("documents")
-      .select("id,title,theme")
-      .eq("user_id", context.userId)
-      .in("id", documentIds);
-
-    for (const document of documents ?? []) {
-      documentsById.set(document.id, { title: document.title, theme: document.theme });
-    }
-  }
-
-  const maps = baseMaps.map((item) => ({
-    ...item,
-    documents: item.document_id ? documentsById.get(item.document_id) ?? null : null,
-  }));
+  const maps = (data ?? []) as MindMapRecord[];
 
   return (
     <div className="space-y-6">
