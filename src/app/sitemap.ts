@@ -1,35 +1,31 @@
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://tepmstudy.vercel.app";
+  const baseUrl = "https://tepmstudy.vercel.app";
+  const lastModified = "2026-04-23";
+
   return [
     {
-      url: baseUrl,
-      lastModified: new Date(),
+      url: `${baseUrl}/`,
+      lastModified,
       changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: `${baseUrl}/login`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.3,
-    },
-    {
       url: `${baseUrl}/cadastro`,
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "monthly",
       priority: 0.6,
     },
     {
       url: `${baseUrl}/termos`,
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "yearly",
       priority: 0.2,
     },
     {
       url: `${baseUrl}/privacidade`,
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "yearly",
       priority: 0.2,
     },

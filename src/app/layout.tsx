@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { PwaRegister } from "@/components/pwa/pwa-register";
+import { LgpdConsentBanner } from "@/components/privacy/lgpd-consent-banner";
 import "./globals.css";
 
 const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL;
@@ -8,14 +9,15 @@ const siteUrl = rawAppUrl && !rawAppUrl.includes("localhost") ? rawAppUrl : "htt
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   applicationName: "TEPM Study",
+  authors: [{ name: "TEPM Study" }],
   alternates: {
-    canonical: "/",
+    canonical: "https://tepmstudy.vercel.app/",
   },
   title: {
-    default: "TEPM Study | Estudos terapêuticos com IA",
+    default: "TEPM Study | Estudos terapêuticos com IA e memória",
     template: "%s | TEPM Study",
   },
-  description: "Plataforma privada de estudos terapêuticos com IA, memória inteligente, PDFs, vídeos, trilhas, revisões e mentora RAG.",
+  description: "Estudos terapêuticos com IA para organizar PDFs, criar memória inteligente e revisar com fontes em ambiente privado.",
   keywords: [
     "estudos terapêuticos",
     "IA terapêutica",
@@ -26,12 +28,20 @@ export const metadata: Metadata = {
     "trilhas de estudo",
   ],
   openGraph: {
-    title: "TEPM Study",
-    description: "Organize estudos terapêuticos, revise melhor e converse com uma mentora IA baseada nos seus materiais.",
-    url: "/",
+    title: "TEPM Study | Estudos terapêuticos com IA e memória",
+    description: "Estudos terapêuticos com IA para organizar PDFs, criar memória inteligente e revisar com fontes em ambiente privado.",
+    url: "https://tepmstudy.vercel.app/",
     siteName: "TEPM Study",
     locale: "pt_BR",
     type: "website",
+    images: [
+      {
+        url: "https://tepmstudy.vercel.app/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "TEPM Study: estudos terapêuticos com IA e memória inteligente.",
+      },
+    ],
   },
   icons: {
     icon: "/icon.svg",
@@ -42,11 +52,26 @@ export const metadata: Metadata = {
       { rel: "icon", url: "/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
   },
-  manifest: "/manifest.webmanifest",
+  manifest: "https://tepmstudy.vercel.app/manifest.json",
   twitter: {
     card: "summary_large_image",
+    title: "TEPM Study | Estudos terapêuticos com IA e memória",
+    description: "Estudos terapêuticos com IA para organizar PDFs, criar memória inteligente e revisar com fontes em ambiente privado.",
+    images: [
+      {
+        url: "https://tepmstudy.vercel.app/og-image.png",
+        alt: "TEPM Study: estudos terapêuticos com IA e memória inteligente.",
+      },
+    ],
+  },
+  appleWebApp: {
+    capable: true,
     title: "TEPM Study",
-    description: "Memória inteligente e IA mentora para estudos terapêuticos.",
+    statusBarStyle: "black-translucent",
+  },
+  other: {
+    language: "pt-BR",
+    rating: "general",
   },
   robots: {
     index: true,
@@ -58,6 +83,10 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#071412",
 };
 
 export default function RootLayout({
@@ -73,6 +102,7 @@ export default function RootLayout({
       </head>
       <body className="nile-ambient">
         <PwaRegister />
+        <LgpdConsentBanner />
         {children}
       </body>
     </html>

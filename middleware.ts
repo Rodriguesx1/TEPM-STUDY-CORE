@@ -8,10 +8,29 @@ type CookieToSet = {
 };
 
 const protectedRoutes = ["/dashboard", "/biblioteca", "/chat", "/trilhas", "/caderno", "/comunidade", "/admin", "/bloqueado"];
+const apiCorsOrigin = "https://tepmstudy.vercel.app";
+
+function applyApiCors(response: NextResponse) {
+  response.headers.set("Access-Control-Allow-Origin", apiCorsOrigin);
+  response.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
+  response.headers.set("Access-Control-Allow-Headers", "Authorization, Content-Type");
+  response.headers.set("Access-Control-Allow-Credentials", "true");
+  response.headers.set("Access-Control-Max-Age", "86400");
+  response.headers.set("Vary", "Origin");
+  return response;
+}
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next({ request });
   const pathname = request.nextUrl.pathname;
+
+  if (pathname.startsWith("/api/")) {
+    if (request.method === "OPTIONS") {
+      return applyApiCors(new NextResponse(null, { status: 204 }));
+    }
+
+    return applyApiCors(response);
+  }
 
   if (!protectedRoutes.some((route) => pathname === route || pathname.startsWith(`${route}/`))) {
     return response;
@@ -47,5 +66,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/biblioteca/:path*", "/chat/:path*", "/trilhas/:path*", "/caderno/:path*", "/comunidade/:path*", "/admin/:path*", "/bloqueado/:path*"],
+  matcher: ["/api/:path*", "/dashboard/:path*", "/biblioteca/:path*", "/chat/:path*", "/trilhas/:path*", "/caderno/:path*", "/comunidade/:path*", "/admin/:path*", "/bloqueado/:path*"],
 };

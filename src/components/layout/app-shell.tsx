@@ -74,7 +74,7 @@ function buildNavItems(isAdmin: boolean): DropdownNavItem[] {
           items: [
             { href: "/dashboard/mind-maps", label: "Mapas mentais", description: "Visualizacao interativa Mind Elixir", icon: Network },
             { href: "/dashboard/slides", label: "Slides", description: "Apresentações editáveis", icon: Presentation },
-            { href: "/dashboard/vídeos", label: "Vídeos", description: "Aulas e transcrições", icon: Video },
+            { href: "/dashboard/videos", label: "Vídeos", description: "Aulas e transcrições", icon: Video },
           ],
         },
       ],

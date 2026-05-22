@@ -1,7 +1,15 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { LockKeyhole, ShieldCheck, Sparkles } from "lucide-react";
 import { AuthForm } from "@/components/auth/auth-form";
 import { AmbientNileBackground, LuxuryBadge, SoftPanel } from "@/components/ui/premium";
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function LoginPage() {
   return (

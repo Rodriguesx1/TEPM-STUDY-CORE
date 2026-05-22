@@ -1,6 +1,7 @@
 /* global self, caches, fetch, URL */
-const CACHE_NAME = "tepm-study-pwa-v1";
-const APP_SHELL = ["/", "/login", "/manifest.webmanifest", "/icon.svg"];
+const CACHE_NAME = "tepm-study-pwa-v2";
+const APP_SHELL = ["/", "/login", "/manifest.json", "/icon.svg", "/icon-192.png"];
+const PRIVATE_PREFIXES = ["/dashboard", "/admin", "/biblioteca", "/chat", "/trilhas", "/caderno", "/comunidade", "/bloqueado"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));
@@ -22,6 +23,7 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
   if (url.pathname.startsWith("/api/")) return;
+  if (PRIVATE_PREFIXES.some((prefix) => url.pathname === prefix || url.pathname.startsWith(`${prefix}/`))) return;
 
   event.respondWith(
     fetch(request)

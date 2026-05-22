@@ -18,7 +18,8 @@ const version = "2026-05";
 
 function setConsentCookie(consent: ConsentState) {
   const value = encodeURIComponent(JSON.stringify(consent));
-  document.cookie = `${cookieName}=${value}; Max-Age=${60 * 60 * 24 * 180}; Path=/; SameSite=Lax`;
+  const secure = window.location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `${cookieName}=${value}; Max-Age=${60 * 60 * 24 * 180}; Path=/; SameSite=Lax${secure}`;
 }
 
 function hasConsentCookie() {
