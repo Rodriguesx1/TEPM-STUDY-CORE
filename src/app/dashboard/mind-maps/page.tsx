@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { MindMapsWorkspace } from "@/components/mind-maps/mind-maps-workspace";
 import { requireUser } from "@/lib/auth/guards";
 import { getServerSupabase } from "@/lib/supabase/server";
@@ -11,17 +10,38 @@ export default async function MindMapsPage({ searchParams }: { searchParams: Pro
 
   const { data, error } = await supabase
     .from("mind_maps")
-    .select("id,user_id,document_id,title,map_json,markdown,created_at,documents(title,theme)")
+    .select("id,user_id,document_id,title,map_json,markdown,created_at")
     .eq("user_id", context.userId)
     .order("created_at", { ascending: false });
 
-  if (error) redirect("/dashboard/library");
-  const maps = ((data ?? []) as Array<Omit<MindMapRecord, "documents"> & { documents?: MindMapRecord["documents"] | MindMapRecord["documents"][] }>).map(
-    (item) => ({
-      ...item,
-      documents: Array.isArray(item.documents) ? item.documents[0] ?? null : item.documents ?? null,
-    }),
-  );
+  if (error) {
+    return (
+      <section className="rounded-[20px] border border-destructive/30 bg-[#fff1f2] p-5 text-sm text-destructive">
+        Nao foi possivel carregar seus mapas mentais: {error.message}
+      </section>
+    );
+  }
+
+  const baseMaps = (data ?? []) as MindMapRecord[];
+  const documentIds = Array.from(new Set(baseMaps.map((item) => item.document_id).filter(Boolean))) as string[];
+  const documentsById = new Map<string, { title: string | null; theme: string | null }>();
+
+  if (documentIds.length) {
+    const { data: documents } = await supabase
+      .from("documents")
+      .select("id,title,theme")
+      .eq("user_id", context.userId)
+      .in("id", documentIds);
+
+    for (const document of documents ?? []) {
+      documentsById.set(document.id, { title: document.title, theme: document.theme });
+    }
+  }
+
+  const maps = baseMaps.map((item) => ({
+    ...item,
+    documents: item.document_id ? documentsById.get(item.document_id) ?? null : null,
+  }));
 
   return (
     <div className="space-y-6">
