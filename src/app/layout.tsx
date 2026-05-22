@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { PwaRegister } from "@/components/pwa/pwa-register";
 import { LgpdConsentBanner } from "@/components/privacy/lgpd-consent-banner";
 import "./globals.css";
@@ -104,6 +105,7 @@ export default function RootLayout({
         <PwaRegister />
         <LgpdConsentBanner />
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );
