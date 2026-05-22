@@ -17,6 +17,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.40.0",
     "lucide-react": "^0.468.0",
+    "mind-elixir": "^5.11.2",
     "next": "^15.3.2",
     "pdf-parse": "^1.1.1",
     "react": "^19.0.0",

@@ -140,7 +140,7 @@ export default function HomePage() {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Falar no WhatsApp
+                    Acessar plano
                   </a>
                 </div>
               ))}

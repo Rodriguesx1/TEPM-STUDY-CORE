@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ChevronDown, ChevronUp, FileCheck2, Maximize2, Minimize2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,7 @@ function getDocumentContent(doc: DocumentWithChunks) {
 }
 
 export function DocumentAuditList({ documents }: { documents: DocumentWithChunks[] }) {
+  const router = useRouter();
   const [minimized, setMinimized] = useState(false);
   const [opened, setOpened] = useState<Record<string, boolean>>({});
   const [maximized, setMaximized] = useState<Record<string, boolean>>({});
@@ -31,9 +33,10 @@ export function DocumentAuditList({ documents }: { documents: DocumentWithChunks
     setMindMapStatus((current) => ({ ...current, [documentId]: "Gerando mapa mental..." }));
     try {
       const response = await fetch(`/api/documents/${documentId}/mind-map`, { method: "POST" });
-      const payload = (await response.json()) as { error?: string };
+      const payload = (await response.json()) as { error?: string; mindMap?: { id: string } };
       if (!response.ok) throw new Error(payload.error ?? "Falha ao gerar mapa mental.");
-      setMindMapStatus((current) => ({ ...current, [documentId]: "Mapa mental gerado e salvo." }));
+      setMindMapStatus((current) => ({ ...current, [documentId]: "Mapa mental gerado. Abrindo area de mapas..." }));
+      if (payload.mindMap?.id) router.push(`/dashboard/mind-maps?map=${payload.mindMap.id}`);
     } catch (error) {
       setMindMapStatus((current) => ({
         ...current,

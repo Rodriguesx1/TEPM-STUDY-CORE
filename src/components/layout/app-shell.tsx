@@ -11,6 +11,7 @@ import {
   Focus,
   LayoutDashboard,
   MessageCircle,
+  Network,
   Presentation,
   Rocket,
   Shield,
@@ -65,6 +66,7 @@ function buildNavItems(isAdmin: boolean): DropdownNavItem[] {
         {
           title: "Materiais",
           items: [
+            { href: "/dashboard/mind-maps", label: "Mapas mentais", description: "Visualizacao interativa Mind Elixir", icon: Network },
             { href: "/dashboard/slides", label: "Slides", description: "Apresentacoes editaveis", icon: Presentation },
             { href: "/dashboard/videos", label: "Videos", description: "Aulas e transcricoes", icon: Video },
           ],
