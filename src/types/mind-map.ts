@@ -3,7 +3,9 @@ export type MindMapRecord = {
   user_id: string;
   document_id?: string | null;
   title: string;
-  map_json: unknown;
+  map_json?: unknown;
+  nodes?: unknown;
+  edges?: unknown;
   markdown: string | null;
   created_at: string;
   documents?: {

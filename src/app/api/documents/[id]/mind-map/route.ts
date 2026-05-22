@@ -51,6 +51,17 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
       map_json: parsed,
       markdown: String(parsed.markdown ?? result.answer),
     };
+    const legacyPayload = {
+      user_id: auth.user.id,
+      title: String(parsed.title ?? `Mapa mental - ${document.data.title}`),
+      nodes: Array.isArray(parsed.branches)
+        ? parsed.branches.map((branch) =>
+            typeof branch === "object" && branch !== null && "title" in branch ? String((branch as { title?: unknown }).title ?? "Tema") : String(branch),
+          )
+        : [String(parsed.central_theme ?? parsed.title ?? document.data.title)],
+      edges: [],
+      markdown: String(parsed.markdown ?? result.answer),
+    };
 
     let created = await admin
       .from("mind_maps")
@@ -58,9 +69,13 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
       .select("*")
       .single();
 
-    if (created.error && created.error.message.toLowerCase().includes("document_id")) {
+    if (created.error && /document_id|map_json/i.test(created.error.message)) {
       const { document_id: _documentId, ...fallbackPayload } = payload;
       created = await admin.from("mind_maps").insert(fallbackPayload).select("*").single();
+    }
+
+    if (created.error && /map_json|document_id/i.test(created.error.message)) {
+      created = await admin.from("mind_maps").insert(legacyPayload).select("*").single();
     }
 
     if (created.error) throw created.error;

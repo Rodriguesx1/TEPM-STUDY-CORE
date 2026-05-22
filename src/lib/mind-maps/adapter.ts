@@ -12,6 +12,7 @@ type GeneratedMindMap = {
   branches?: unknown;
   practical_applications?: unknown;
   study_questions?: unknown;
+  nodes?: unknown;
 };
 
 function text(value: unknown, fallback: string) {
@@ -68,8 +69,15 @@ function branchNode(branch: GeneratedBranch, index: number): NodeObj {
 export function toMindElixirData(mapJson: unknown, fallbackTitle: string): MindElixirData {
   const source = (mapJson && typeof mapJson === "object" ? mapJson : {}) as GeneratedMindMap;
   const title = text(source.central_theme, text(source.title, fallbackTitle));
+  const legacyNodes = Array.isArray(source.nodes) ? source.nodes : [];
   const branches = Array.isArray(source.branches) ? (source.branches as GeneratedBranch[]) : [];
-  const children: NodeObj[] = branches.map(branchNode);
+  const children: NodeObj[] = branches.length
+    ? branches.map(branchNode)
+    : legacyNodes.map((node, index) => ({
+        id: nodeId("legacy-node", index),
+        topic: text(node, `Topico ${index + 1}`),
+        direction: index % 2 === 0 ? 0 : 1,
+      }));
   const applications = stringList(source.practical_applications);
   const questions = stringList(source.study_questions);
 
