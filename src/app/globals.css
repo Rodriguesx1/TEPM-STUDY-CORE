@@ -90,6 +90,19 @@ select {
   font: inherit;
 }
 
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+textarea,
+select {
+  color: var(--foreground);
+  caret-color: var(--primary);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted-foreground);
+  opacity: 0.88;
+}
+
 h1,
 h2,
 h3,
@@ -137,11 +150,30 @@ li {
 }
 
 :root.dark .bg-white,
+:root.dark .bg-white\/50,
+:root.dark .bg-white\/70,
+:root.dark .bg-white\/75,
 :root.dark .bg-white\/80,
 :root.dark .bg-white\/82,
+:root.dark .bg-white\/85,
+:root.dark .bg-white\/90,
 :root.dark .bg-white\/96,
 :root.dark .bg-white\/74 {
   background-color: rgba(23, 37, 34, 0.92);
+}
+
+:root.dark input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+:root.dark textarea,
+:root.dark select {
+  color: #f5eee8;
+  background-color: rgba(23, 37, 34, 0.92);
+  border-color: #3b5f56;
+}
+
+:root.dark input::placeholder,
+:root.dark textarea::placeholder {
+  color: #c7ddd5;
+  opacity: 1;
 }
 
 :root.dark .text-\[\#14352f\],
