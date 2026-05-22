@@ -20,6 +20,14 @@ export default function TermsPage() {
             <p>O TEPM Study organiza materiais enviados pelo usuario para estudo, revisao, memoria vetorial, IA mentora e produtividade terapeutica.</p>
             <p>O usuario declara possuir direito, autorizacao ou base legal para enviar PDFs, videos, textos e demais arquivos. A plataforma nao deve ser usada para expor, redistribuir ou comercializar conteudo protegido sem autorizacao.</p>
             <p>Respostas de IA servem como apoio educacional. Elas nao substituem avaliacao profissional, diagnostico medico, conduta clinica individualizada ou supervisao tecnica.</p>
+            <p>Calendario ciclico, diario emocional, notificacoes sensiveis e sons terapeuticos sao opcionais. O usuario pode nao ativar, revogar consentimento, exportar ou excluir os dados sensiveis relacionados.</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader><CardTitle>Limites medicos</CardTitle></CardHeader>
+          <CardContent className="space-y-3 text-sm leading-7 text-muted-foreground">
+            <p>O TEPM Study nao diagnostica condicoes, nao preve gravidez, nao indica tratamento medico e nao substitui profissionais de saude.</p>
+            <p>Previsoes ciclicas sao estimativas editaveis baseadas nos dados informados. Sintomas e humor sao registros pessoais para organizacao de estudo e autocuidado, nao interpretacao clinica.</p>
           </CardContent>
         </Card>
         <Card>

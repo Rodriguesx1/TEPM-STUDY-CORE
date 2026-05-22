@@ -44,6 +44,28 @@ export function PrivacyCenter() {
     }
   }
 
+  async function exportSensitiveData() {
+    setExporting(true);
+    setMessage(null);
+    try {
+      const response = await fetch("/api/sensitive/export", { cache: "no-store" });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error ?? "Falha ao exportar dados sensiveis.");
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `tepm-dados-sensiveis-${new Date().toISOString().slice(0, 10)}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+      setMessage("Exportacao sensivel gerada.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Falha ao exportar dados sensiveis.");
+    } finally {
+      setExporting(false);
+    }
+  }
+
   async function requestDeletion() {
     const response = await fetch("/api/privacy", {
       method: "POST",
@@ -53,6 +75,21 @@ export function PrivacyCenter() {
     const payload = (await response.json()) as { error?: string; message?: string };
     if (!response.ok) throw new Error(payload.error ?? "Falha ao solicitar exclusao.");
     setMessage(payload.message ?? "Solicitacao de exclusao registrada com prazo de seguranca.");
+  }
+
+  async function deleteSensitive(scope: string) {
+    try {
+      const response = await fetch("/api/sensitive/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ scope, reason }),
+      });
+      const payload = (await response.json()) as { error?: string };
+      if (!response.ok) throw new Error(payload.error ?? "Falha ao excluir dados sensiveis.");
+      setMessage("Dados sensiveis removidos conforme escopo solicitado.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Falha ao excluir dados sensiveis.");
+    }
   }
 
   return (
@@ -89,7 +126,14 @@ export function PrivacyCenter() {
           </CardHeader>
           <CardContent className="space-y-4">
             <Button onClick={exportData} disabled={exporting}><Download className="mr-2 h-4 w-4" />Exportar meus dados</Button>
+            <Button variant="outline" onClick={exportSensitiveData} disabled={exporting}><Download className="mr-2 h-4 w-4" />Exportar dados sensiveis</Button>
             <Textarea value={reason} onChange={(event) => setReason(event.target.value)} placeholder="Motivo opcional da exclusao" />
+            <div className="grid gap-2 sm:grid-cols-2">
+              <Button variant="outline" onClick={() => deleteSensitive("cycle")}>Excluir ciclo</Button>
+              <Button variant="outline" onClick={() => deleteSensitive("journal")}>Excluir diario</Button>
+              <Button variant="outline" onClick={() => deleteSensitive("notifications")}>Excluir notificacoes</Button>
+              <Button variant="outline" onClick={() => deleteSensitive("all_sensitive")}>Excluir dados sensiveis</Button>
+            </div>
             <Button variant="danger" onClick={requestDeletion}><Trash2 className="mr-2 h-4 w-4" />Solicitar exclusao da conta</Button>
           </CardContent>
         </Card>

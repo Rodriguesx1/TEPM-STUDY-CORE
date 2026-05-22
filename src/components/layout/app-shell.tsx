@@ -3,6 +3,7 @@
 import Link from "next/link";
 import {
   BarChart3,
+  Bell,
   BookOpen,
   Brain,
   CalendarDays,
@@ -12,6 +13,7 @@ import {
   LayoutDashboard,
   MessageCircle,
   Network,
+  NotebookPen,
   Presentation,
   Rocket,
   Shield,
@@ -19,6 +21,7 @@ import {
   Sparkles,
   Users,
   Video,
+  Waves,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Badge } from "@/components/ui/badge";
@@ -45,7 +48,10 @@ function buildNavItems(isAdmin: boolean): DropdownNavItem[] {
           title: "Rotina",
           items: [
             { href: "/dashboard/calendar", label: "Calendario", description: "Tarefas, revisoes e metas", icon: CalendarDays },
+            { href: "/dashboard/cycle", label: "Ciclo", description: "Calendario ciclico opcional", icon: Waves },
+            { href: "/dashboard/journal", label: "Diario", description: "Reflexoes privadas opt-in", icon: NotebookPen },
             { href: "/dashboard/productivity", label: "Produtividade", description: "Foco, pomodoro e escuta", icon: Focus },
+            { href: "/dashboard/notifications", label: "Notificacoes", description: "Push, sons e preferencias", icon: Bell },
             { href: "/dashboard/reports", label: "Relatorios", description: "Evolucao, lacunas e desempenho", icon: BarChart3 },
           ],
         },
@@ -118,7 +124,7 @@ function mobileNavItems(isAdmin: boolean) {
     { href: "/dashboard", label: "Inicio", icon: LayoutDashboard },
     { href: "/biblioteca", label: "PDFs", icon: FileText },
     { href: "/chat", label: "IA", icon: Brain },
-    { href: "/dashboard/mind-maps", label: "Mapas", icon: Network },
+    { href: "/dashboard/journal", label: "Diario", icon: NotebookPen },
     isAdmin
       ? { href: "/admin", label: "Admin", icon: Shield }
       : { href: "/trilhas", label: "Trilhas", icon: BookOpen },

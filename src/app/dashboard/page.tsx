@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ArrowRight, BookOpenCheck, Brain, CalendarDays, FileText, NotebookPen, Sparkles } from "lucide-react";
+import { ArrowRight, Bell, BookOpenCheck, Brain, CalendarDays, FileText, NotebookPen, Sparkles, Waves } from "lucide-react";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { AppShell } from "@/components/layout/app-shell";
+import { AdaptationCard } from "@/components/sensitive/adaptation-card";
 import { Button } from "@/components/ui/button";
 import { LuxuryBadge, PremiumCard, SoftPanel } from "@/components/ui/premium";
 import { requireUser } from "@/lib/auth/guards";
@@ -77,6 +78,9 @@ export default async function DashboardPage() {
                 { href: "/chat", label: "Conversar com IA", icon: Brain, primary: true },
                 { href: "/trilhas", label: "Gerar trilha", icon: BookOpenCheck },
                 { href: "/caderno", label: "Abrir caderno", icon: NotebookPen },
+                { href: "/dashboard/journal", label: "Diario privado", icon: NotebookPen },
+                { href: "/dashboard/cycle", label: "Ciclo opcional", icon: Waves },
+                { href: "/dashboard/notifications", label: "Notificacoes", icon: Bell },
                 { href: "/dashboard/calendar", label: "Revisoes", icon: CalendarDays },
                 { href: "/dashboard/mind-maps", label: "Mapas mentais", icon: Sparkles },
               ].map((action) => (
@@ -90,22 +94,7 @@ export default async function DashboardPage() {
             </div>
           </PremiumCard>
 
-          <PremiumCard>
-            <LuxuryBadge>Ativacao inicial</LuxuryBadge>
-            <div className="mt-5 space-y-3">
-              {[
-                { label: "Enviar primeiro PDF", done: Boolean(documents.count) },
-                { label: "Criar uma anotacao", done: Boolean(notes.count) },
-                { label: "Gerar trilha", done: Boolean(paths.count) },
-                { label: "Abrir calendario", done: false },
-              ].map((item) => (
-                <SoftPanel key={item.label} className="flex items-center justify-between gap-3">
-                  <p className="font-semibold text-[#f2eadf]">{item.label}</p>
-                  <span className={item.done ? "text-sm font-bold text-[#6fae9b]" : "text-sm text-[#cbbfb1]"}>{item.done ? "Concluido" : "Pendente"}</span>
-                </SoftPanel>
-              ))}
-            </div>
-          </PremiumCard>
+          <AdaptationCard />
         </div>
 
         <PremiumCard>

@@ -18,6 +18,7 @@ export default function PrivacyPolicyPage() {
           <CardHeader><CardTitle>Dados tratados</CardTitle></CardHeader>
           <CardContent className="space-y-3 text-sm leading-7 text-muted-foreground">
             <p>Tratamos dados de conta, licencas, arquivos enviados, transcricoes, chunks, embeddings, notas, mensagens, eventos de estudo, logs tecnicos e consentimentos.</p>
+            <p>Recursos femininos sensiveis, como calendario ciclico, humor, energia, sintomas, diario emocional e sons/notificacoes personalizadas, sao opcionais e exigem consentimento especifico antes de qualquer registro.</p>
             <p>Chaves de API e credenciais administrativas permanecem apenas no servidor. O navegador usa somente configuracoes publicas necessarias para autenticacao.</p>
           </CardContent>
         </Card>
@@ -25,7 +26,15 @@ export default function PrivacyPolicyPage() {
           <CardHeader><CardTitle>Direitos do titular</CardTitle></CardHeader>
           <CardContent className="space-y-3 text-sm leading-7 text-muted-foreground">
             <p>Usuarios autenticados podem exportar seus dados e solicitar exclusao pelo centro de privacidade em `/dashboard/privacy`.</p>
+            <p>Consentimentos sensiveis podem ser revogados. A revogacao bloqueia o recurso e permite excluir dados de ciclo, diario, notificacoes ou todos os dados sensiveis.</p>
             <p>Solicitacoes de exclusao ficam registradas em logs de privacidade e usam janela de seguranca para evitar perda acidental.</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader><CardTitle>Dados sensiveis e limites</CardTitle></CardHeader>
+          <CardContent className="space-y-3 text-sm leading-7 text-muted-foreground">
+            <p>Dados sobre ciclo, sintomas, humor e diario pessoal sao tratados como sensiveis. Por padrao, administradores nao devem acessar o conteudo do diario emocional ou registros ciclicos.</p>
+            <p>A IA so usa diario ou ciclo quando houver permissao explicita para adaptacao sensivel. Logs tecnicos devem registrar metadados minimizados, sem conteudo intimo.</p>
           </CardContent>
         </Card>
         <Card>
