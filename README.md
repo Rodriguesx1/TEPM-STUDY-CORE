@@ -68,6 +68,11 @@ npm run dev
 
 ## Pendências para produção
 
+[![Perf](https://devfix.uk/api/badge.php?url=https%3A%2F%2Ftepmstudy.vercel.app&metric=performance)](https://devfix.uk/)
+[![A11y](https://devfix.uk/api/badge.php?url=https%3A%2F%2Ftepmstudy.vercel.app&metric=accessibility)](https://devfix.uk/)
+[![Seo](https://devfix.uk/api/badge.php?url=https%3A%2F%2Ftepmstudy.vercel.app&metric=seo)](https://devfix.uk/)
+[![Bp](https://devfix.uk/api/badge.php?url=https%3A%2F%2Ftepmstudy.vercel.app&metric=best-practices)](https://devfix.uk/)
+
 - Configurar banco remoto e aplicar migrations.
 - Criar usuário admin inicial com SQL controlado.
 - Validar políticas de isolamento diretamente no banco com usuários reais.
