@@ -36,7 +36,7 @@ export function AuthForm({ initialMode = "login" }: { initialMode?: "login" | "s
         router.refresh();
       }
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Nao foi possivel autenticar agora.");
+      setMessage(error instanceof Error ? error.message : "Não foi possível autenticar agora.");
     } finally {
       setLoading(false);
     }
@@ -47,7 +47,7 @@ export function AuthForm({ initialMode = "login" }: { initialMode?: "login" | "s
       <LuxuryBadge>{mode === "login" ? "Acesso privado" : "Novo acesso"}</LuxuryBadge>
       <h2 className="mt-5 font-serif text-4xl leading-none text-[#f3eee8]">{mode === "login" ? "Entre no seu ambiente." : "Crie seu acesso."}</h2>
       <p className="mt-3 text-sm leading-7 text-[#cbbfb1]">
-        Seus materiais, trilhas e conversas com IA protegidos em um so lugar.
+        Seus materiais, trilhas e conversas com IA protegidos em um só lugar.
       </p>
       <div className="mt-6">
         <form onSubmit={submit} className="space-y-4">
@@ -64,7 +64,7 @@ export function AuthForm({ initialMode = "login" }: { initialMode?: "login" | "s
             variant="ghost"
             onClick={() => setMode(mode === "login" ? "signup" : "login")}
           >
-            {mode === "login" ? "Criar uma conta" : "Ja tenho conta"}
+            {mode === "login" ? "Criar uma conta" : "Já tenho conta"}
           </Button>
         </form>
       </div>

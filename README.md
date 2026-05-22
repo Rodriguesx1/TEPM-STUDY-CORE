@@ -1,6 +1,6 @@
 # TEPM Study
 
-SaaS privado de estudos terapeuticos com IA, biblioteca de PDFs, memoria vetorial, licencas, comunidade interna e painel admin.
+SaaS privado de estudos terapêuticos com IA, biblioteca de PDFs, memória vetorial, licenças, comunidade interna e painel admin.
 
 ## Stack
 
@@ -8,13 +8,13 @@ SaaS privado de estudos terapeuticos com IA, biblioteca de PDFs, memoria vetoria
 - TypeScript
 - TailwindCSS
 - Componentes UI internos inspirados em Shadcn/UI
-- Autenticacao, banco relacional, storage privado e politicas de acesso
+- Autenticação, banco relacional, storage privado e políticas de acesso
 - pgvector
 - Gemini API com fallback OpenRouter
 
 ## Instalação local
 
-1. Instale dependencias:
+1. Instale dependências:
 
 ```bash
 npm install
@@ -46,30 +46,30 @@ npm run dev
 
 ## Segurança e LGPD
 
-- Dados de usuario ficam isolados por `user_id`.
-- Tabelas sensiveis usam politicas de isolamento por usuario.
+- Dados de usuário ficam isolados por `user_id`.
+- Tabelas sensíveis usam políticas de isolamento por usuário.
 - Chave service role fica somente no servidor.
 - Upload de PDF exige consentimento operacional e bucket privado.
-- Chat IA exige licenca ativa e usa apenas chunks do usuario autenticado.
+- Chat IA exige licença ativa e usa apenas chunks do usuário autenticado.
 - Logs de auditoria registram eventos relevantes sem gravar chaves.
 
 ## Checklist funcional
 
 - Home e login carregam sem o ambiente de dados configurado.
-- Login real exige o provedor de autenticacao configurado.
+- Login real exige o provedor de autenticação configurado.
 - Dashboard, biblioteca, chat, caderno, trilhas, comunidade e admin exigem sessão.
 - Upload aceita somente PDF e respeita `MAX_UPLOAD_MB`.
-- PDF e salvo em storage privado, extraido com `pdf-parse`, dividido em chunks e gravado em `document_chunks`.
+- PDF é salvo em storage privado, extraído com `pdf-parse`, dividido em chunks e gravado em `document_chunks`.
 - Embeddings usam Gemini quando `GEMINI_API_KEY` existe.
-- Chat consulta chunks do usuario e responde via Gemini, com fallback OpenRouter.
-- Licencas bloqueiam recursos premium quando expiradas ou ausentes para usuarios comuns.
-- Super administradores com `role = 'admin'` tem acesso ilimitado sem licenca.
+- Chat consulta chunks do usuário e responde via Gemini, com fallback OpenRouter.
+- Licenças bloqueiam recursos premium quando expiradas ou ausentes para usuários comuns.
+- Super administradores com `role = 'admin'` têm acesso ilimitado sem licença.
 - Admin exige role `admin`.
 
-## Pendencias para produção
+## Pendências para produção
 
 - Configurar banco remoto e aplicar migrations.
-- Criar usuario admin inicial com SQL controlado.
-- Validar politicas de isolamento diretamente no banco com usuarios reais.
+- Criar usuário admin inicial com SQL controlado.
+- Validar políticas de isolamento diretamente no banco com usuários reais.
 - Publicar Edge Functions para processamento pesado de video/transcricao.
 - Adicionar Playwright e testes automatizados depois da infra real estar conectada.

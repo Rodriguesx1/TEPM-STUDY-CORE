@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "TEPM Study",
     short_name: "TEPM Study",
-    description: "Plataforma privada de estudos terapeuticos com IA, memoria inteligente e trilhas de revisao.",
+    description: "Plataforma privada de estudos terapêuticos com IA, memória inteligente e trilhas de revisão.",
     start_url: "/",
     display: "standalone",
     orientation: "portrait",
@@ -18,9 +18,22 @@ export default function manifest(): MetadataRoute.Manifest {
         type: "image/svg+xml",
       },
       {
-        src: "/apple-icon.svg",
+        src: "/apple-touch-icon.png",
         sizes: "180x180",
-        type: "image/svg+xml",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "maskable",
+      },
+      {
+        src: "/icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
       },
     ],
   };

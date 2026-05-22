@@ -38,8 +38,8 @@ function buildNavItems(isAdmin: boolean): DropdownNavItem[] {
         {
           title: "Base de estudo",
           items: [
-            { href: "/dashboard", label: "Dashboard", description: "Visao geral e proximas acoes", icon: LayoutDashboard },
-            { href: "/biblioteca", label: "Biblioteca", description: "PDFs, chunks e memoria", icon: FileText },
+            { href: "/dashboard", label: "Dashboard", description: "Visão geral e próximas ações", icon: LayoutDashboard },
+            { href: "/biblioteca", label: "Biblioteca", description: "PDFs, chunks e memória", icon: FileText },
             { href: "/caderno", label: "Caderno", description: "Notas, scripts e reflexoes", icon: MessageCircle },
             { href: "/trilhas", label: "Trilhas", description: "Planos de estudo por tema", icon: BookOpen },
           ],
@@ -47,11 +47,11 @@ function buildNavItems(isAdmin: boolean): DropdownNavItem[] {
         {
           title: "Rotina",
           items: [
-            { href: "/dashboard/calendar", label: "Calendario", description: "Tarefas, revisoes e metas", icon: CalendarDays },
-            { href: "/dashboard/cycle", label: "Ciclo", description: "Calendario ciclico opcional", icon: Waves },
-            { href: "/dashboard/journal", label: "Diario", description: "Reflexoes privadas opt-in", icon: NotebookPen },
+            { href: "/dashboard/calendar", label: "Calendário", description: "Tarefas, revisões e metas", icon: CalendarDays },
+            { href: "/dashboard/cycle", label: "Ciclo", description: "Calendário cíclico opcional", icon: Waves },
+            { href: "/dashboard/journal", label: "Diário", description: "Reflexões privadas opt-in", icon: NotebookPen },
             { href: "/dashboard/productivity", label: "Produtividade", description: "Foco, pomodoro e escuta", icon: Focus },
-            { href: "/dashboard/notifications", label: "Notificacoes", description: "Push, sons e preferencias", icon: Bell },
+            { href: "/dashboard/notifications", label: "Notificações", description: "Push, sons e preferências", icon: Bell },
             { href: "/dashboard/reports", label: "Relatorios", description: "Evolucao, lacunas e desempenho", icon: BarChart3 },
           ],
         },
@@ -62,7 +62,7 @@ function buildNavItems(isAdmin: boolean): DropdownNavItem[] {
       label: "IA",
       subMenus: [
         {
-          title: "Mentoria e memoria",
+          title: "Mentoria e memória",
           items: [
             { href: "/chat", label: "Mentora IA", description: "Chat RAG com fontes", icon: Brain },
             { href: "/dashboard/intelligence", label: "Inteligencia", description: "Memory Core e multiagentes", icon: Sparkles },
@@ -73,8 +73,8 @@ function buildNavItems(isAdmin: boolean): DropdownNavItem[] {
           title: "Materiais",
           items: [
             { href: "/dashboard/mind-maps", label: "Mapas mentais", description: "Visualizacao interativa Mind Elixir", icon: Network },
-            { href: "/dashboard/slides", label: "Slides", description: "Apresentacoes editaveis", icon: Presentation },
-            { href: "/dashboard/videos", label: "Videos", description: "Aulas e transcricoes", icon: Video },
+            { href: "/dashboard/slides", label: "Slides", description: "Apresentações editáveis", icon: Presentation },
+            { href: "/dashboard/vídeos", label: "Vídeos", description: "Aulas e transcrições", icon: Video },
           ],
         },
       ],
@@ -91,9 +91,9 @@ function buildNavItems(isAdmin: boolean): DropdownNavItem[] {
           ],
         },
         {
-          title: "Seguranca",
+          title: "Segurança",
           items: [
-            { href: "/dashboard/privacy", label: "Privacidade", description: "LGPD, exportacao e exclusao", icon: ShieldCheck },
+            { href: "/dashboard/privacy", label: "Privacidade", description: "LGPD, exportação e exclusão", icon: ShieldCheck },
           ],
         },
       ],
@@ -108,7 +108,7 @@ function buildNavItems(isAdmin: boolean): DropdownNavItem[] {
         {
           title: "Gestao",
           items: [
-            { href: "/admin", label: "Admin Master", description: "Usuarios, licencas e logs", icon: Shield },
+            { href: "/admin", label: "Admin Master", description: "Usuários, licenças e logs", icon: Shield },
             { href: "/admin/billing", label: "Financeiro", description: "Planos, cupons e historico", icon: CreditCard },
           ],
         },
@@ -124,7 +124,7 @@ function mobileNavItems(isAdmin: boolean) {
     { href: "/dashboard", label: "Inicio", icon: LayoutDashboard },
     { href: "/biblioteca", label: "PDFs", icon: FileText },
     { href: "/chat", label: "IA", icon: Brain },
-    { href: "/dashboard/journal", label: "Diario", icon: NotebookPen },
+    { href: "/dashboard/journal", label: "Diário", icon: NotebookPen },
     isAdmin
       ? { href: "/admin", label: "Admin", icon: Shield }
       : { href: "/trilhas", label: "Trilhas", icon: BookOpen },
@@ -144,7 +144,7 @@ export function AppShell({ children, context }: { children: React.ReactNode; con
             <div className="flex shrink-0 items-center gap-2">
               <ThemeToggle />
               <Badge className={context.hasPremiumAccess ? "hidden border-[#b79a6b]/40 text-[#f2eadf] sm:inline-flex" : "hidden text-destructive sm:inline-flex"}>
-                {context.isAdmin ? "Admin" : context.hasPremiumAccess ? "Licenca ativa" : "Acesso limitado"}
+                {context.isAdmin ? "Admin" : context.hasPremiumAccess ? "Licença ativa" : "Acesso limitado"}
               </Badge>
               <form action="/auth/signout" method="post">
                 <Button variant="outline" size="sm" type="submit">

@@ -16,7 +16,7 @@ export default function LoginPage() {
             Entre no seu ambiente privado de estudos.
           </h1>
           <p className="mt-6 max-w-xl text-base leading-8 text-[#d8cec2]">
-            Seus materiais, trilhas, revisoes e conversas com IA protegidos em um so lugar, com uma experiencia calma e organizada.
+            Seus materiais, trilhas, revisões e conversas com IA protegidos em um só lugar, com uma experiência calma e organizada.
           </p>
           <div className="mt-8 grid gap-3 sm:grid-cols-3">
             {[

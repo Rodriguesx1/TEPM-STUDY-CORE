@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="TEPM Study">
+  <rect width="512" height="512" rx="120" fill="#071412"/>
+  <circle cx="256" cy="256" r="202" fill="#0D2B26"/>
+  <circle cx="256" cy="256" r="164" fill="none" stroke="#6FAE9B" stroke-width="10" opacity="0.72"/>
+  <path d="M162 181h188v41h-69v166h-50V222h-69v-41Z" fill="#F3EEE8"/>
+  <path d="M166 344c45 26 136 26 181 0" fill="none" stroke="#B79A6B" stroke-width="18" stroke-linecap="round"/>
+</svg>
