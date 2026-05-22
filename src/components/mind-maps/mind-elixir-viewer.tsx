@@ -82,19 +82,32 @@ export function MindElixirViewer({ map }: { map: MindMapRecord }) {
   }, [data]);
 
   async function exportPng() {
-    const blob = await instanceRef.current?.exportPng();
-    if (!blob) return;
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = `${map.title}.png`;
-    anchor.click();
-    URL.revokeObjectURL(url);
+    try {
+      const blob = await instanceRef.current?.exportPng();
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `${map.title}.png`;
+      anchor.click();
+      URL.revokeObjectURL(url);
+    } catch (exportError) {
+      setError(exportError instanceof Error ? exportError.message : "Nao foi possivel exportar o mapa mental.");
+    }
+  }
+
+  function centerMap() {
+    instanceRef.current?.scaleFit();
+  }
+
+  function toggleExpanded() {
+    setExpanded((value) => !value);
+    window.setTimeout(() => instanceRef.current?.scaleFit(), 180);
   }
 
   return (
-    <section className="rounded-[20px] border bg-white/85 p-4 shadow-sm backdrop-blur">
-      <div className="flex flex-wrap items-start justify-between gap-3">
+    <section className="relative rounded-[20px] border bg-white/85 p-4 shadow-sm backdrop-blur">
+      <div className="relative z-30 flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="font-serif text-2xl font-bold text-[#183c35]">{map.title}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -102,12 +115,12 @@ export function MindElixirViewer({ map }: { map: MindMapRecord }) {
             {map.documents?.theme ? `- ${map.documents.theme}` : ""}
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <Button type="button" variant="outline" size="sm" onClick={() => instanceRef.current?.scaleFit()}>
+        <div className="relative z-40 flex flex-wrap gap-2" onPointerDown={(event) => event.stopPropagation()}>
+          <Button type="button" variant="outline" size="sm" onClick={centerMap}>
             <LocateFixed className="h-4 w-4" />
             Centralizar
           </Button>
-          <Button type="button" variant="outline" size="sm" onClick={() => setExpanded((value) => !value)}>
+          <Button type="button" variant="outline" size="sm" onClick={toggleExpanded}>
             {expanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
             {expanded ? "Compactar" : "Expandir"}
           </Button>
@@ -123,7 +136,7 @@ export function MindElixirViewer({ map }: { map: MindMapRecord }) {
       <div
         ref={containerRef}
         className={[
-          "mt-4 w-full overflow-hidden rounded-[18px] border border-border bg-[#f3fbf6]",
+          "relative z-0 mt-4 w-full overflow-hidden rounded-[18px] border border-border bg-[#f3fbf6]",
           expanded ? "h-[76vh]" : "h-[34rem]",
         ].join(" ")}
       />

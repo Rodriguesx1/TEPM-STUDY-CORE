@@ -1,6 +1,9 @@
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { MindMapsWorkspace } from "@/components/mind-maps/mind-maps-workspace";
 import { requireUser } from "@/lib/auth/guards";
 import { getServerSupabase } from "@/lib/supabase/server";
+import { Button } from "@/components/ui/button";
 import type { MindMapRecord } from "@/types/mind-map";
 
 export default async function MindMapsPage({ searchParams }: { searchParams: Promise<{ map?: string }> }) {
@@ -29,13 +32,19 @@ export default async function MindMapsPage({ searchParams }: { searchParams: Pro
       central_theme: item.title,
       nodes: item.nodes ?? [],
       edges: item.edges ?? [],
-      markdown: item.markdown,
+      markdown: item.markdown ?? "",
     },
   }));
 
   return (
     <div className="space-y-6">
       <section className="rounded-[20px] border bg-white/85 p-5 shadow-sm backdrop-blur">
+        <Link href="/dashboard/library">
+          <Button type="button" variant="outline" size="sm" className="mb-4">
+            <ArrowLeft className="h-4 w-4" />
+            Sair dos mapas
+          </Button>
+        </Link>
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Mind Elixir</p>
         <h1 className="mt-2 font-serif text-3xl font-bold text-[#183c35]">Mapas mentais</h1>
         <p className="mt-2 max-w-3xl text-sm leading-7 text-muted-foreground">
