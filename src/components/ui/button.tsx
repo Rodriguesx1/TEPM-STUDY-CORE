@@ -7,18 +7,18 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const variants = {
-  primary: "bg-primary text-primary-foreground shadow-[0_12px_30px_rgba(47,125,104,0.22)] hover:bg-[#256553] hover:shadow-[0_16px_42px_rgba(47,125,104,0.34)]",
-  secondary: "bg-secondary text-secondary-foreground shadow-[0_10px_24px_rgba(20,53,47,0.08)] hover:bg-[#c7dfd3] hover:shadow-[0_14px_34px_rgba(47,125,104,0.18)]",
-  outline: "border border-border bg-white/74 text-foreground shadow-[0_10px_26px_rgba(199,166,75,0.11)] hover:border-[#c7a64b] hover:bg-white hover:shadow-[0_14px_36px_rgba(199,166,75,0.2)]",
-  ghost: "text-foreground hover:bg-white/50 hover:shadow-[0_10px_24px_rgba(47,125,104,0.12)]",
+  primary: "bg-[#6fae9b] text-[#071412] shadow-[0_14px_42px_rgba(111,174,155,0.22)] hover:bg-[#8bc8b7] hover:shadow-[0_18px_58px_rgba(111,174,155,0.28)]",
+  secondary: "bg-[#1e5f55] text-[#f3eee8] shadow-[0_12px_34px_rgba(30,95,85,0.22)] hover:bg-[#277265]",
+  outline: "border border-[#6fae9b]/28 bg-[#0d2b26]/54 text-[#f3eee8] shadow-[inset_0_1px_0_rgba(242,234,223,0.06)] hover:border-[#b79a6b]/55 hover:bg-[#123a34]",
+  ghost: "text-[#f3eee8] hover:bg-[#f2eadf]/8 hover:text-[#f2eadf]",
   danger: "bg-destructive text-white shadow-[0_12px_30px_rgba(180,35,53,0.18)] hover:bg-[#941d2b] hover:shadow-[0_16px_42px_rgba(180,35,53,0.28)]",
 };
 
 const sizes = {
-  sm: "h-9 px-3 text-sm",
-  md: "h-11 px-4 text-sm",
-  lg: "h-12 px-6 text-base",
-  icon: "h-10 w-10",
+  sm: "min-h-10 px-3 text-sm",
+  md: "min-h-12 px-5 text-sm",
+  lg: "min-h-[3.25rem] px-7 py-3 text-base",
+  icon: "h-11 w-11",
 };
 
 export function Button({
@@ -30,7 +30,7 @@ export function Button({
   return (
     <button
       className={cn(
-        "inline-flex min-w-0 items-center justify-center gap-2 rounded-[14px] font-semibold transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 disabled:pointer-events-none disabled:opacity-50",
+        "inline-flex min-w-0 items-center justify-center gap-2 rounded-full font-bold transition duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50",
         variants[variant],
         sizes[size],
         className,

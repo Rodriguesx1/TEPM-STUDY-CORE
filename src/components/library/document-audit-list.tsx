@@ -19,6 +19,7 @@ export function DocumentAuditList({ documents }: { documents: DocumentWithChunks
   const [minimized, setMinimized] = useState(false);
   const [opened, setOpened] = useState<Record<string, boolean>>({});
   const [maximized, setMaximized] = useState<Record<string, boolean>>({});
+  const [collapsedCategories, setCollapsedCategories] = useState<Record<string, boolean>>({});
   const [mindMapStatus, setMindMapStatus] = useState<Record<string, string>>({});
   const grouped = useMemo(() => {
     return documents.reduce<Record<string, DocumentWithChunks[]>>((acc, doc) => {
@@ -72,11 +73,32 @@ export function DocumentAuditList({ documents }: { documents: DocumentWithChunks
           {documents.length ? (
             Object.entries(grouped).map(([category, docs]) => (
               <div key={category} className="space-y-2">
-                <div className="flex items-center justify-between gap-3">
-                  <h3 className="font-serif text-xl font-bold text-[#183c35]">{category}</h3>
-                  <Badge>{docs.length} PDF{docs.length === 1 ? "" : "s"}</Badge>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex min-w-0 flex-wrap items-center gap-3">
+                    <h3 className="font-serif text-xl font-bold text-[#183c35]">{category}</h3>
+                    <Badge>{docs.length} PDF{docs.length === 1 ? "" : "s"}</Badge>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCollapsedCategories((current) => ({ ...current, [category]: !current[category] }))}
+                    aria-expanded={!collapsedCategories[category]}
+                    aria-controls={`audit-category-${category.replace(/\W+/g, "-").toLowerCase()}`}
+                  >
+                    {collapsedCategories[category] ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
+                    {collapsedCategories[category] ? "Maximizar bloco" : "Minimizar bloco"}
+                  </Button>
                 </div>
-                <div className="overflow-x-auto">
+                {collapsedCategories[category] ? (
+                  <div
+                    id={`audit-category-${category.replace(/\W+/g, "-").toLowerCase()}`}
+                    className="rounded-[14px] bg-secondary p-4 text-sm text-secondary-foreground"
+                  >
+                    Bloco minimizado. {docs.length} PDF{docs.length === 1 ? "" : "s"} auditado{docs.length === 1 ? "" : "s"} nesta categoria.
+                  </div>
+                ) : (
+                <div id={`audit-category-${category.replace(/\W+/g, "-").toLowerCase()}`} className="overflow-x-auto">
                   <table className="w-full min-w-[760px] border-separate border-spacing-y-2 text-left text-sm">
                     <thead>
                       <tr className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
@@ -177,6 +199,7 @@ export function DocumentAuditList({ documents }: { documents: DocumentWithChunks
                     </tbody>
                   </table>
                 </div>
+                )}
               </div>
             ))
           ) : (

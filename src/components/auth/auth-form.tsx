@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { LuxuryBadge, PremiumCard } from "@/components/ui/premium";
 import { getBrowserSupabase } from "@/lib/supabase/client";
 
 export function AuthForm({ initialMode = "login" }: { initialMode?: "login" | "signup" }) {
@@ -43,17 +43,18 @@ export function AuthForm({ initialMode = "login" }: { initialMode?: "login" | "s
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader>
-        <CardTitle>{mode === "login" ? "Entrar" : "Criar acesso"}</CardTitle>
-        <CardDescription>Use sua conta autorizada. Recursos premium dependem de licenca ativa.</CardDescription>
-      </CardHeader>
-      <CardContent>
+    <PremiumCard className="w-full max-w-md p-6 sm:p-7">
+      <LuxuryBadge>{mode === "login" ? "Acesso privado" : "Novo acesso"}</LuxuryBadge>
+      <h2 className="mt-5 font-serif text-4xl leading-none text-[#f3eee8]">{mode === "login" ? "Entre no seu ambiente." : "Crie seu acesso."}</h2>
+      <p className="mt-3 text-sm leading-7 text-[#cbbfb1]">
+        Seus materiais, trilhas e conversas com IA protegidos em um so lugar.
+      </p>
+      <div className="mt-6">
         <form onSubmit={submit} className="space-y-4">
           {mode === "signup" ? <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome completo" /> : null}
           <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="E-mail" type="email" required />
           <Input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Senha" type="password" minLength={6} required />
-          {message ? <p className="rounded-[14px] bg-secondary p-3 text-sm text-secondary-foreground">{message}</p> : null}
+          {message ? <p className="rounded-[18px] border border-[#6fae9b]/20 bg-[#102722] p-3 text-sm leading-6 text-[#f2eadf]">{message}</p> : null}
           <Button className="w-full" type="submit" disabled={loading}>
             {loading ? "Validando..." : mode === "login" ? "Acessar plataforma" : "Cadastrar"}
           </Button>
@@ -66,7 +67,7 @@ export function AuthForm({ initialMode = "login" }: { initialMode?: "login" | "s
             {mode === "login" ? "Criar uma conta" : "Ja tenho conta"}
           </Button>
         </form>
-      </CardContent>
-    </Card>
+      </div>
+    </PremiumCard>
   );
 }

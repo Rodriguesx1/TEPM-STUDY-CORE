@@ -1,44 +1,53 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
 @import "mind-elixir/style.css";
 @import "tailwindcss";
 
 :root {
-  --background: #f3fbf6;
-  --foreground: #142d29;
-  --card: #ffffff;
-  --card-foreground: #142d29;
-  --primary: #2f7d68;
-  --primary-foreground: #f8fff9;
-  --secondary: #d9ebe2;
-  --secondary-foreground: #183c35;
-  --muted: #eaf5ef;
-  --muted-foreground: #59736b;
-  --accent: #c7a64b;
-  --accent-foreground: #142d29;
+  --background: #071412;
+  --foreground: #f3eee8;
+  --card: #0d2b26;
+  --card-foreground: #f3eee8;
+  --primary: #1e5f55;
+  --primary-foreground: #f3eee8;
+  --secondary: #123a34;
+  --secondary-foreground: #f2eadf;
+  --muted: #102722;
+  --muted-foreground: #cbbfb1;
+  --accent: #b79a6b;
+  --accent-foreground: #071412;
   --destructive: #b42335;
-  --border: #cfe2d8;
-  --input: #cfe2d8;
-  --ring: #6aa892;
-  --radius: 18px;
+  --border: rgba(111, 174, 155, 0.28);
+  --input: rgba(111, 174, 155, 0.32);
+  --ring: #6fae9b;
+  --radius: 24px;
+  --nile-deep: #0d2b26;
+  --nile-lit: #1e5f55;
+  --jade-soft: #6fae9b;
+  --cream-warm: #f2eadf;
+  --gold-muted: #b79a6b;
+  --text-premium: #f3eee8;
+  --shadow-soft: 0 24px 90px rgba(0, 0, 0, 0.28);
+  --shadow-nile: 0 22px 80px rgba(30, 95, 85, 0.22);
+  --blur-panel: blur(22px);
 }
 
 :root.dark {
-  --background: #101b19;
-  --foreground: #f5eee8;
-  --card: #172522;
-  --card-foreground: #f5eee8;
-  --primary: #75b8a0;
-  --primary-foreground: #08211c;
-  --secondary: #223b35;
-  --secondary-foreground: #eaf7f1;
-  --muted: #1d302b;
-  --muted-foreground: #b8cec5;
-  --accent: #e2c875;
-  --accent-foreground: #111b18;
+  --background: #071412;
+  --foreground: #f3eee8;
+  --card: #0d2b26;
+  --card-foreground: #f3eee8;
+  --primary: #6fae9b;
+  --primary-foreground: #071412;
+  --secondary: #123a34;
+  --secondary-foreground: #f2eadf;
+  --muted: #102722;
+  --muted-foreground: #cbbfb1;
+  --accent: #b79a6b;
+  --accent-foreground: #071412;
   --destructive: #f17b89;
-  --border: #315049;
-  --input: #3b5f56;
-  --ring: #9bd4c1;
+  --border: rgba(111, 174, 155, 0.28);
+  --input: rgba(111, 174, 155, 0.32);
+  --ring: #6fae9b;
 }
 
 @theme inline {
@@ -58,8 +67,8 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --font-sans: "Open Sans", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Playfair Display", "Georgia", "Times New Roman", serif;
+  --font-sans: "Manrope", "Inter", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", "Georgia", "Times New Roman", serif;
 }
 
 * {
@@ -76,10 +85,11 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at top left, rgba(199, 166, 75, 0.18), transparent 30rem),
-    linear-gradient(135deg, #f3fbf6 0%, #e8f5ee 48%, #eef4ff 100%);
+    radial-gradient(circle at 18% 8%, rgba(111, 174, 155, 0.22), transparent 28rem),
+    radial-gradient(circle at 88% 20%, rgba(183, 154, 107, 0.16), transparent 24rem),
+    linear-gradient(135deg, #071412 0%, #0d2b26 54%, #071412 100%);
   color: var(--foreground);
-  font-family: "Open Sans", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Manrope", "Inter", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: antialiased;
 }
@@ -108,8 +118,8 @@ h1,
 h2,
 h3,
 .font-serif {
-  font-family: "Playfair Display", "Georgia", "Times New Roman", serif;
-  font-weight: 700;
+  font-family: "Cormorant Garamond", "Georgia", "Times New Roman", serif;
+  font-weight: 600;
   letter-spacing: 0;
 }
 
@@ -139,18 +149,29 @@ li {
 
 .premium-glow {
   box-shadow:
-    0 0 0 1px rgba(207, 226, 216, 0.82),
-    0 22px 70px rgba(47, 125, 104, 0.22),
-    0 0 55px rgba(199, 166, 75, 0.18);
+    0 0 0 1px rgba(111, 174, 155, 0.26),
+    0 22px 70px rgba(30, 95, 85, 0.22),
+    0 0 55px rgba(183, 154, 107, 0.12);
 }
 
 :root.dark body {
   background:
-    radial-gradient(circle at top left, rgba(226, 200, 117, 0.13), transparent 30rem),
-    linear-gradient(135deg, #101b19 0%, #142622 48%, #171a2b 100%);
+    radial-gradient(circle at 18% 8%, rgba(111, 174, 155, 0.22), transparent 28rem),
+    radial-gradient(circle at 88% 20%, rgba(183, 154, 107, 0.16), transparent 24rem),
+    linear-gradient(135deg, #071412 0%, #0d2b26 54%, #071412 100%);
 }
 
 :root.dark .bg-white,
+:root .bg-white,
+:root .bg-white\/50,
+:root .bg-white\/70,
+:root .bg-white\/75,
+:root .bg-white\/80,
+:root .bg-white\/82,
+:root .bg-white\/85,
+:root .bg-white\/90,
+:root .bg-white\/96,
+:root .bg-white\/74,
 :root.dark .bg-white\/50,
 :root.dark .bg-white\/70,
 :root.dark .bg-white\/75,
@@ -161,6 +182,67 @@ li {
 :root.dark .bg-white\/96,
 :root.dark .bg-white\/74 {
   background-color: rgba(23, 37, 34, 0.92);
+}
+
+.nile-ambient {
+  position: relative;
+  isolation: isolate;
+}
+
+.nile-ambient::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(111, 174, 155, 0.16), transparent 30rem),
+    radial-gradient(circle at 86% 12%, rgba(183, 154, 107, 0.12), transparent 24rem),
+    radial-gradient(circle at 58% 88%, rgba(30, 95, 85, 0.22), transparent 30rem);
+}
+
+.nile-ambient::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.14;
+  background-image: linear-gradient(rgba(242, 234, 223, 0.08) 1px, transparent 1px);
+  background-size: 100% 4px;
+}
+
+.nile-glow {
+  box-shadow:
+    inset 0 1px 0 rgba(242, 234, 223, 0.08),
+    0 24px 80px rgba(0, 0, 0, 0.24),
+    0 0 44px rgba(111, 174, 155, 0.08);
+}
+
+.calm-enter {
+  animation: calmFade 720ms ease both;
+}
+
+@keyframes calmFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 :root.dark input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
@@ -178,6 +260,11 @@ li {
 }
 
 :root.dark .text-\[\#14352f\],
+:root .text-\[\#14352f\],
+:root .text-\[\#183c35\],
+:root .text-\[\#2a1026\],
+:root .text-\[\#2b1428\],
+:root .text-\[\#32162c\],
 :root.dark .text-\[\#183c35\],
 :root.dark .text-\[\#2a1026\],
 :root.dark .text-\[\#2b1428\],
@@ -186,14 +273,19 @@ li {
 }
 
 :root.dark .text-\[\#604758\],
+:root .text-\[\#604758\],
+:root .text-muted-foreground,
 :root.dark .text-muted-foreground {
-  color: #b8cec5;
+  color: #cbbfb1;
 }
 
 :root.dark .bg-\[\#eef8f2\],
+:root .bg-\[\#eef8f2\],
+:root .bg-\[\#fbf7f3\],
+:root .bg-\[\#f3fbf6\],
 :root.dark .bg-\[\#fbf7f3\],
 :root.dark .bg-\[\#f3fbf6\] {
-  background-color: #1d302b;
+  background-color: rgba(16, 39, 34, 0.78);
 }
 
 :root.dark .border-white\/60,

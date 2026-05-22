@@ -1,40 +1,55 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowRight, Brain, FileText, Lock, Users } from "lucide-react";
+import { ArrowRight, BookOpenCheck, Brain, CheckCircle2, FileText, Lock, MessageCircle, Sparkles } from "lucide-react";
 import { LgpdConsentBanner } from "@/components/privacy/lgpd-consent-banner";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ShinyButton } from "@/components/ui/shiny-button";
+import { ActionCluster, AmbientNileBackground, CalmGrid, LuxuryBadge, PremiumCard, SectionShell, SoftPanel } from "@/components/ui/premium";
+
+const whatsapp = "5571999589626";
 
 const features = [
-  { title: "Biblioteca inteligente", description: "PDFs deixam de ficar espalhados e viram memoria pesquisavel.", icon: FileText },
-  { title: "Mentora IA com RAG", description: "A IA responde citando os materiais processados, sem fingir contexto.", icon: Brain },
-  { title: "Licencas e comunidade", description: "Planos, validade, salas privadas e permissao por membro.", icon: Users },
-  { title: "LGPD e seguranca", description: "Dados isolados por usuario, consentimento de upload e logs de acesso.", icon: Lock },
+  { title: "Biblioteca inteligente", description: "PDFs, resumos e aulas deixam de ficar espalhados e viram uma memoria pesquisavel.", icon: FileText },
+  { title: "Mentora IA com fontes", description: "A IA responde com base nos seus materiais processados e indica de onde veio o contexto.", icon: Brain },
+  { title: "Trilhas e revisoes", description: "O estudo ganha ordem, prioridade e revisao com direcao, sem sobrecarregar sua rotina.", icon: BookOpenCheck },
+  { title: "Ambiente privado", description: "Uso pessoal ou organizacional com controle de acesso, licencas, logs e LGPD.", icon: Lock },
 ];
 
 const pains = [
-  "Aulas e PDFs acumulados sem direcao",
-  "Dificuldade para revisar e lembrar conteudos",
+  "PDFs e aulas acumulados sem um caminho claro",
+  "Dificuldade para revisar e lembrar pontos importantes",
   "Tempo perdido procurando scripts, resumos e temas",
-  "Necessidade de transformar estudo em pratica terapeutica",
+  "Ansiedade cognitiva por excesso de conteudo solto",
+];
+
+const steps = [
+  "Envie seus PDFs e materiais autorizados.",
+  "A plataforma extrai, resume e organiza por tema.",
+  "A Mentora IA responde com base na sua memoria de estudos.",
+  "Voce transforma conteudo em trilhas, mapas e revisoes.",
 ];
 
 const plans = [
-  { name: "Free", description: "Entrada limitada para conhecer a plataforma.", message: "Ola, quero conhecer o plano Free do TEPM Study." },
-  { name: "Estudante", description: "PDFs, caderno e chat IA para rotina individual.", message: "Ola, quero informacoes sobre o plano Estudante do TEPM Study." },
-  { name: "Premium", description: "Trilhas, mapas mentais e comunidade privada.", message: "Ola, quero informacoes sobre o plano Premium do TEPM Study." },
-  { name: "Profissional", description: "Licencas, grupos, auditoria e painel admin.", message: "Ola, quero informacoes sobre o plano Profissional do TEPM Study." },
+  { name: "Free", description: "Entrada limitada para conhecer o ambiente.", highlight: false, message: "Ola, quero conhecer o plano Free do TEPM Study." },
+  { name: "Estudante", description: "PDFs, caderno e chat IA para rotina individual.", highlight: false, message: "Ola, quero informacoes sobre o plano Estudante do TEPM Study." },
+  { name: "Premium", description: "Trilhas, mapas mentais, revisoes e comunidade privada.", highlight: true, message: "Ola, quero informacoes sobre o plano Premium do TEPM Study." },
+  { name: "Profissional", description: "Licencas, grupos, auditoria e painel administrativo.", highlight: false, message: "Ola, quero informacoes sobre o plano Profissional do TEPM Study." },
+];
+
+const faqs = [
+  ["Isso substitui um curso?", "Nao. O TEPM Study organiza seus materiais autorizados e apoia estudo, revisao e aplicacao."],
+  ["Meus arquivos ficam seguros?", "A proposta e manter dados privados, isolados por usuario e protegidos por autenticacao e permissoes."],
+  ["A IA inventa respostas?", "O modo RAG prioriza responder a partir dos materiais enviados. Quando nao encontra base, deve sinalizar a ausencia de contexto."],
+  ["Posso usar para estudo pessoal?", "Sim. O foco e estudo privado, organizacao terapeutica e produtividade cognitiva."],
 ];
 
 export const metadata: Metadata = {
-  title: "TEPM Study | Plataforma de estudos terapeuticos com IA",
-  description: "Organize PDFs, videos, revisoes, trilhas e memoria inteligente em uma plataforma privada de estudos terapeuticos com IA mentora.",
+  title: "TEPM Study | Ambiente cognitivo terapeutico com IA",
+  description: "Organize PDFs terapeuticos, crie memoria pesquisavel, converse com IA com fontes e siga trilhas de revisao com direcao.",
   alternates: { canonical: "/" },
   openGraph: {
     title: "TEPM Study",
-    description: "Estudos terapeuticos com IA, memoria inteligente, trilhas e revisoes.",
+    description: "Ambiente privado de estudos terapeuticos com IA, memoria inteligente, revisoes e mapas mentais.",
     url: "/",
     type: "website",
   },
@@ -47,112 +62,150 @@ export default function HomePage() {
     name: "TEPM Study",
     applicationCategory: "EducationalApplication",
     operatingSystem: "Web",
-    description: "Plataforma privada de estudos terapeuticos com IA, memoria inteligente, trilhas, revisoes e mentora RAG.",
+    description: "Ambiente privado de estudos terapeuticos com IA, memoria pesquisavel, trilhas e revisoes.",
     offers: plans.map((plan) => ({ "@type": "Offer", name: plan.name, description: plan.description })),
   };
 
   return (
-    <main className="min-h-screen overflow-hidden">
+    <AmbientNileBackground>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <LgpdConsentBanner />
-      <section className="relative px-5 py-8 md:px-10 lg:px-16">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between">
-          <div>
-            <p className="font-serif text-2xl font-bold text-[#32162c]">TEPM Study</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <Link href="/login">
-              <Button size="sm">Entrar</Button>
-            </Link>
-          </div>
-        </nav>
-        <div className="mx-auto grid max-w-7xl items-center gap-10 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
-          <div>
-            <h1 className="max-w-4xl font-serif text-5xl font-bold leading-[1.04] text-[#2b1428] md:text-7xl">
+      <main className="overflow-hidden">
+        <header className="sticky top-0 z-40 border-b border-[#6fae9b]/14 bg-[#071412]/70 backdrop-blur-2xl">
+          <SectionShell className="flex items-center justify-between py-4">
+            <Link href="/" className="font-serif text-3xl font-semibold leading-none text-[#f3eee8]">
               TEPM Study
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-[#604758]">
-              Transforme PDFs terapeuticos em resumos, memoria inteligente, trilhas de estudo e respostas com fontes.
-              Menos busca manual, mais clareza para estudar, revisar e aplicar.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            </Link>
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
               <Link href="/login">
-                <ShinyButton className="bg-primary text-primary-foreground shadow-[0_12px_30px_rgba(47,125,104,0.22)]">
-                  Login <ArrowRight className="inline h-4 w-4" />
-                </ShinyButton>
+                <Button size="sm">Entrar</Button>
+              </Link>
+            </div>
+          </SectionShell>
+        </header>
+
+        <SectionShell className="grid items-center gap-8 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
+          <div className="calm-enter">
+            <LuxuryBadge>Ambiente privado de estudos terapeuticos</LuxuryBadge>
+            <h1 className="mt-6 max-w-4xl font-serif text-6xl leading-[0.92] text-[#f3eee8] sm:text-7xl lg:text-8xl">
+              Menos ruido. Mais clareza para estudar e aplicar.
+            </h1>
+            <p className="mt-7 max-w-2xl text-lg leading-9 text-[#d8cec2]">
+              Organize PDFs, videos e anotacoes em uma memoria inteligente. Converse com uma mentora IA com fontes,
+              gere trilhas, mapas mentais e revisoes com direcao.
+            </p>
+            <ActionCluster className="mt-9">
+              <Link href="/login">
+                <Button size="lg">
+                  Entrar no ambiente <ArrowRight className="h-4 w-4" />
+                </Button>
               </Link>
               <Link href="/login?teste=1">
                 <Button size="lg" variant="outline">
-                  Teste
+                  Acessar teste
                 </Button>
               </Link>
-            </div>
+            </ActionCluster>
           </div>
-          <div className="premium-glow rounded-[28px] border border-white/80 bg-[#14352f] p-4 shadow-2xl sm:p-5">
-            <div className="rounded-[22px] bg-[#f3fbf6] p-4 sm:p-5">
-              <div className="grid gap-4">
-                {features.map((feature) => (
-                  <Card key={feature.title} className="bg-white">
-                    <CardHeader className="flex flex-row items-start gap-3 p-4 sm:p-5">
-                      <feature.icon className="mt-1 h-5 w-5 text-primary" />
-                      <div>
-                        <CardTitle>{feature.title}</CardTitle>
-                        <CardDescription>{feature.description}</CardDescription>
-                      </div>
-                    </CardHeader>
-                  </Card>
-                ))}
-              </div>
+
+          <PremiumCard className="relative overflow-hidden p-5 sm:p-6">
+            <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-[#6fae9b]/14 blur-3xl" />
+            <div className="relative space-y-4">
+              {features.map((feature) => (
+                <SoftPanel key={feature.title} className="flex gap-4 p-4">
+                  <feature.icon className="mt-1 h-5 w-5 shrink-0 text-[#6fae9b]" />
+                  <div>
+                    <h2 className="font-serif text-2xl text-[#f3eee8]">{feature.title}</h2>
+                    <p className="mt-1 text-sm leading-7 text-[#cbbfb1]">{feature.description}</p>
+                  </div>
+                </SoftPanel>
+              ))}
             </div>
-          </div>
-        </div>
-        <div className="mx-auto grid max-w-7xl gap-6 pb-16 lg:grid-cols-3">
-          <Card className="lg:col-span-1">
-            <CardHeader>
-              <CardTitle>Dores que o TEPM resolve</CardTitle>
-              <CardDescription>Organizacao e revisao para quem estuda muito e precisa aplicar melhor.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm text-muted-foreground">
+          </PremiumCard>
+        </SectionShell>
+
+        <SectionShell className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+          <PremiumCard>
+            <LuxuryBadge>Dor real</LuxuryBadge>
+            <h2 className="mt-4 font-serif text-4xl text-[#f3eee8]">O excesso de conteudo nao precisa virar ansiedade.</h2>
+            <div className="mt-6 space-y-3">
               {pains.map((pain) => (
-                <p key={pain} className="rounded-[14px] bg-[#eef8f2] p-3">{pain}</p>
+                <SoftPanel key={pain} className="flex items-start gap-3">
+                  <CheckCircle2 className="mt-1 h-4 w-4 text-[#6fae9b]" />
+                  <p className="text-sm leading-7 text-[#f2eadf]">{pain}</p>
+                </SoftPanel>
               ))}
-            </CardContent>
-          </Card>
-          <Card className="lg:col-span-2">
-            <CardHeader>
-              <CardTitle>Planos</CardTitle>
-              <CardDescription>Licencas por perfil, limites de uso e comunidade premium.</CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-3 md:grid-cols-2">
-              {plans.map((plan) => (
-                <div key={plan.name} className="rounded-[16px] border bg-white p-4">
-                  <h3 className="font-serif text-xl font-bold text-[#183c35]">{plan.name}</h3>
-                  <p className="mt-2 min-h-12 text-sm leading-6 text-muted-foreground">{plan.description}</p>
-                  <a
-                    className={[
-                      "mt-4 inline-flex h-9 w-full min-w-0 items-center justify-center gap-2 rounded-[14px] px-3 text-sm font-semibold transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 sm:w-auto",
-                      plan.name === "Premium"
-                        ? "bg-primary text-primary-foreground shadow-[0_12px_30px_rgba(47,125,104,0.22)] hover:bg-[#256553] hover:shadow-[0_16px_42px_rgba(47,125,104,0.34)]"
-                        : "border border-border bg-white/74 text-foreground shadow-[0_10px_26px_rgba(199,166,75,0.11)] hover:border-[#c7a64b] hover:bg-white hover:shadow-[0_14px_36px_rgba(199,166,75,0.2)]",
-                    ].join(" ")}
-                    href={`https://wa.me/5571999589626?text=${encodeURIComponent(plan.message)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+            </div>
+          </PremiumCard>
+
+          <PremiumCard>
+            <LuxuryBadge>Como funciona</LuxuryBadge>
+            <CalmGrid className="mt-5 md:grid-cols-2">
+              {steps.map((step, index) => (
+                <SoftPanel key={step}>
+                  <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#b79a6b]">0{index + 1}</span>
+                  <p className="mt-3 text-sm leading-7 text-[#f2eadf]">{step}</p>
+                </SoftPanel>
+              ))}
+            </CalmGrid>
+          </PremiumCard>
+        </SectionShell>
+
+        <SectionShell>
+          <div className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <LuxuryBadge>Planos</LuxuryBadge>
+              <h2 className="mt-4 font-serif text-5xl leading-none text-[#f3eee8]">Escolha seu nivel de direcao.</h2>
+            </div>
+            <p className="max-w-xl text-sm leading-7 text-[#cbbfb1]">Planos para estudo pessoal, rotina premium e organizacoes que precisam de controle.</p>
+          </div>
+          <CalmGrid className="md:grid-cols-2 xl:grid-cols-4">
+            {plans.map((plan) => (
+              <PremiumCard key={plan.name} className={plan.highlight ? "border-[#b79a6b]/55 bg-[#123a34]/82" : ""}>
+                {plan.highlight ? <LuxuryBadge>Mais completo</LuxuryBadge> : null}
+                <h3 className="mt-3 font-serif text-4xl text-[#f3eee8]">{plan.name}</h3>
+                <p className="mt-3 min-h-20 text-sm leading-7 text-[#cbbfb1]">{plan.description}</p>
+                <a href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(plan.message)}`} target="_blank" rel="noreferrer">
+                  <Button className="mt-5 w-full" variant={plan.highlight ? "primary" : "outline"}>
                     Acessar plano
-                  </a>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        </div>
-        <footer className="mx-auto flex max-w-7xl flex-wrap gap-3 pb-8 text-sm text-muted-foreground">
-          <Link href="/termos" className="hover:text-[#14352f]">Termos de uso</Link>
-          <Link href="/privacidade" className="hover:text-[#14352f]">Politica de privacidade</Link>
+                  </Button>
+                </a>
+              </PremiumCard>
+            ))}
+          </CalmGrid>
+        </SectionShell>
+
+        <SectionShell className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+          <PremiumCard>
+            <Sparkles className="h-6 w-6 text-[#b79a6b]" />
+            <h2 className="mt-4 font-serif text-4xl text-[#f3eee8]">Pronto para transformar material acumulado em direcao?</h2>
+            <p className="mt-4 text-sm leading-7 text-[#cbbfb1]">Comece pelo primeiro PDF. A plataforma organiza o conteudo para voce estudar com menos busca manual e mais continuidade.</p>
+            <Link href="/login">
+              <Button className="mt-6">Entrar agora</Button>
+            </Link>
+          </PremiumCard>
+          <CalmGrid className="md:grid-cols-2">
+            {faqs.map(([question, answer]) => (
+              <SoftPanel key={question}>
+                <h3 className="font-serif text-2xl text-[#f3eee8]">{question}</h3>
+                <p className="mt-2 text-sm leading-7 text-[#cbbfb1]">{answer}</p>
+              </SoftPanel>
+            ))}
+          </CalmGrid>
+        </SectionShell>
+
+        <footer className="border-t border-[#6fae9b]/14">
+          <SectionShell className="flex flex-col gap-3 py-8 text-sm text-[#cbbfb1] sm:flex-row sm:items-center sm:justify-between">
+            <p>TEPM Study. Estudo privado, memoria inteligente e organizacao terapeutica.</p>
+            <div className="flex gap-4">
+              <Link href="/termos" className="hover:text-[#f2eadf]">Termos</Link>
+              <Link href="/privacidade" className="hover:text-[#f2eadf]">Privacidade</Link>
+              <Link href="/login" className="hover:text-[#f2eadf]"><MessageCircle className="mr-1 inline h-4 w-4" />Entrar</Link>
+            </div>
+          </SectionShell>
         </footer>
-      </section>
-    </main>
+      </main>
+    </AmbientNileBackground>
   );
 }
-

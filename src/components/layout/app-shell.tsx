@@ -113,19 +113,31 @@ function buildNavItems(isAdmin: boolean): DropdownNavItem[] {
   return items;
 }
 
+function mobileNavItems(isAdmin: boolean) {
+  return [
+    { href: "/dashboard", label: "Inicio", icon: LayoutDashboard },
+    { href: "/biblioteca", label: "PDFs", icon: FileText },
+    { href: "/chat", label: "IA", icon: Brain },
+    { href: "/dashboard/mind-maps", label: "Mapas", icon: Network },
+    isAdmin
+      ? { href: "/admin", label: "Admin", icon: Shield }
+      : { href: "/trilhas", label: "Trilhas", icon: BookOpen },
+  ];
+}
+
 export function AppShell({ children, context }: { children: React.ReactNode; context: SessionContext }) {
   return (
-    <div className="min-h-dvh">
-      <header className="sticky top-0 z-40 border-b border-white/60 bg-white/82 px-3 py-3 backdrop-blur sm:px-4 md:px-8 dark:bg-[#172522]/88">
+    <div className="min-h-dvh pb-24 md:pb-0">
+      <header className="sticky top-0 z-40 border-b border-[#6fae9b]/16 bg-[#071412]/78 px-3 py-3 shadow-[0_18px_60px_rgba(0,0,0,0.2)] backdrop-blur-2xl sm:px-4 md:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-3">
-          <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center justify-between gap-3">
             <Link href="/dashboard" className="min-w-0">
-              <p className="font-serif text-xl font-bold text-[#183c35] sm:text-2xl">TEPM Study</p>
-              <p className="truncate text-xs text-muted-foreground sm:text-sm">{context.email}</p>
+              <p className="font-serif text-2xl font-semibold leading-none text-[#f3eee8] sm:text-3xl">TEPM Study</p>
+              <p className="mt-1 max-w-[12rem] truncate text-xs text-[#cbbfb1] sm:max-w-none sm:text-sm">{context.email}</p>
             </Link>
             <div className="flex shrink-0 items-center gap-2">
               <ThemeToggle />
-              <Badge className={context.hasPremiumAccess ? "border-[#d7bb5f] text-[#795b13]" : "text-destructive"}>
+              <Badge className={context.hasPremiumAccess ? "hidden border-[#b79a6b]/40 text-[#f2eadf] sm:inline-flex" : "hidden text-destructive sm:inline-flex"}>
                 {context.isAdmin ? "Admin" : context.hasPremiumAccess ? "Licenca ativa" : "Acesso limitado"}
               </Badge>
               <form action="/auth/signout" method="post">
@@ -135,10 +147,29 @@ export function AppShell({ children, context }: { children: React.ReactNode; con
               </form>
             </div>
           </div>
-          <DropdownNavigation navItems={buildNavItems(context.isAdmin)} />
+          <div className="hidden md:block">
+            <DropdownNavigation navItems={buildNavItems(context.isAdmin)} />
+          </div>
         </div>
       </header>
-      <main className="mx-auto min-h-dvh max-w-7xl p-3 pb-10 sm:p-4 sm:pb-12 md:p-8 md:pb-14">{children}</main>
+      <main className="mx-auto min-h-dvh max-w-7xl p-4 pb-10 sm:p-5 sm:pb-12 md:p-8 md:pb-14">{children}</main>
+      <nav className="fixed inset-x-3 bottom-3 z-50 rounded-[26px] border border-[#6fae9b]/22 bg-[#071412]/88 px-2 py-2 shadow-[0_22px_70px_rgba(0,0,0,0.34)] backdrop-blur-2xl md:hidden">
+        <div className="grid grid-cols-5 gap-1">
+          {mobileNavItems(context.isAdmin).map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="flex min-h-14 flex-col items-center justify-center gap-1 rounded-[18px] px-1 text-[11px] font-bold text-[#f3eee8] transition active:bg-[#1e5f55]/40"
+              >
+                <Icon className="h-4 w-4 text-[#6fae9b]" />
+                <span className="whitespace-nowrap">{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
     </div>
   );
 }
